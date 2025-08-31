@@ -134,3 +134,103 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
+
+// PUT - Modifier un produit
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
+    
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
+    
+    const sql = `UPDATE products SET 
+      name = ?, description = ?, price = ?, prices = ?, 
+      category_id = ?, farm_id = ?, image_url = ?, video_url = ?, 
+      stock = ?, is_available = ?, features = ?, tags = ?
+    WHERE id = ?`;
+    
+    const values = [
+      body.name,
+      body.description || '',
+      parseFloat(body.price) || 0,
+      JSON.stringify(body.prices || {}),
+      body.category_id || null,
+      body.farm_id || null,
+      body.image_url || '',
+      body.video_url || '',
+      parseInt(body.stock) || 0,
+      body.is_available !== false,
+      JSON.stringify(body.features || []),
+      JSON.stringify(body.tags || []),
+      body.id
+    ];
+    
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ sql, params: values })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Produit modifié avec succès');
+      return NextResponse.json({ success: true });
+    } else {
+      throw new Error('Erreur modification produit');
+    }
+  } catch (error) {
+    console.error('❌ Erreur modification produit:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
+}
+
+// DELETE - Supprimer un produit
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ error: 'ID produit requis' }, { status: 400 });
+    }
+    
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
+    
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
+    
+    const sql = `DELETE FROM products WHERE id = ?`;
+    
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ sql, params: [parseInt(id)] })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Produit supprimé avec succès');
+      return NextResponse.json({ success: true });
+    } else {
+      throw new Error('Erreur suppression produit');
+    }
+  } catch (error) {
+    console.error('❌ Erreur suppression produit:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
+}
