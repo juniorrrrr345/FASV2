@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react';
 
 interface SocialLink {
-  _id?: string;
+  id?: number;
   name: string;
   url: string;
   icon: string;
   color: string;
-  isActive: boolean;
+  is_active: boolean;
 }
 
 export default function SocialLinksManager() {
@@ -29,7 +29,7 @@ export default function SocialLinksManager() {
   const loadSocialLinks = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/cloudflare/social-links');
+      const response = await fetch('/api/social-simple');
       if (response.ok) {
         const data = await response.json();
         
@@ -78,7 +78,7 @@ export default function SocialLinksManager() {
         return;
       }
 
-      const url = editingLink ? `/api/cloudflare/social-links/${editingLink._id}` : '/api/cloudflare/social-links';
+      const url = editingLink ? `/api/social-simple/${editingLink._id}` : '/api/social-simple';
       const method = editingLink ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
@@ -141,7 +141,7 @@ export default function SocialLinksManager() {
         const originalLinks = [...socialLinks];
         setSocialLinks(prev => prev.filter(link => link._id !== linkId));
 
-        const response = await fetch(`/api/cloudflare/social-links/${linkId}`, {
+        const response = await fetch(`/api/social-simple/${linkId}`, {
           method: 'DELETE',
         });
 

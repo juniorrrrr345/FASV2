@@ -31,10 +31,13 @@ export default function MediaDisplay({
     );
   }
 
-  // Détecter si c'est une vidéo basé sur l'extension ou le type MIME
+  // Détection vidéo : MP4 classique + Cloudflare Video + iframe
   const isVideo = /\.(mp4|webm|ogg|avi|mov|wmv)(\?|$)/i.test(url) || 
                   url.includes('video/') ||
-                  url.includes('/videos/');
+                  url.includes('/videos/') ||
+                  url.includes('videodelivery.net') ||
+                  url.includes('iframe.videodelivery') ||
+                  url.includes('cloudflarestream.com');
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -49,7 +52,7 @@ export default function MediaDisplay({
   if (hasError) {
     return (
       <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
-        <span className="text-red-500">Erreur de chargement</span>
+        <span className="text-gray-500">Erreur de chargement</span>
       </div>
     );
   }
@@ -63,27 +66,46 @@ export default function MediaDisplay({
       )}
       
       {isVideo ? (
-        <video
-          src={url}
-          className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-          controls={controls}
-          autoPlay={autoPlay}
-          loop={loop}
-          muted={muted}
-          onLoadedData={handleLoad}
-          onError={handleError}
-          preload="metadata"
-        >
-          <source src={url} />
-          Votre navigateur ne supporte pas la lecture vidéo.
-        </video>
+        // Support vidéos Cloudflare iframe
+        url.includes('iframe.videodelivery') || url.includes('cloudflarestream.com') ? (
+          <iframe
+            src={url}
+            className={`w-full h-full ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+            frameBorder="0"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowFullScreen
+            onLoad={handleLoad}
+            onError={handleError}
+            title="Vidéo produit"
+          />
+        ) : (
+          // Support vidéos MP4 classiques
+          <video
+            src={url}
+            className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+            controls={controls}
+            autoPlay={autoPlay}
+            loop={loop}
+            muted={muted}
+            onLoadedData={handleLoad}
+            onError={handleError}
+            preload="metadata"
+            playsInline
+          >
+            <source src={url} type="video/mp4" />
+            <source src={url} type="video/webm" />
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </video>
+        )
       ) : (
+        // Support images : Cloudflare R2 + imagedelivery.net + URLs classiques
         <img
           src={url}
           alt={alt}
           className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           onLoad={handleLoad}
           onError={handleError}
+          loading="lazy"
         />
       )}
     </div>

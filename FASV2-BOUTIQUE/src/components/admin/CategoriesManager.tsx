@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 interface Category {
-  _id?: string;
+  id?: number;
   name: string;
   description?: string;
 }
@@ -25,7 +25,7 @@ export default function CategoriesManager() {
     try {
       setLoading(true);
       console.log('🏷️ Admin: Chargement des catégories...');
-      const response = await fetch('/api/cloudflare/categories');
+      const response = await fetch('/api/categories-simple');
       console.log('🏷️ Admin: Réponse catégories:', response.status);
       if (response.ok) {
         const data = await response.json();
@@ -71,7 +71,7 @@ export default function CategoriesManager() {
     }
 
     try {
-      const url = editingCategory ? `/api/cloudflare/categories/${editingCategory._id}` : '/api/cloudflare/categories';
+      const url = editingCategory ? `/api/categories-simple/${editingCategory._id}` : '/api/categories-simple';
       const method = editingCategory ? 'PUT' : 'POST';
       
       console.log('💾 Sauvegarde catégorie:', { url, method, data: formData });
@@ -123,7 +123,7 @@ export default function CategoriesManager() {
 
         console.log('🗑️ Suppression catégorie:', categoryId);
         
-        const response = await fetch(`/api/cloudflare/categories/${categoryId}`, {
+        const response = await fetch(`/api/categories-simple/${categoryId}`, {
           method: 'DELETE',
         });
 

@@ -9,12 +9,12 @@ import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FASV2 - Boutique en ligne',
-  description: 'FASV2 - Votre boutique en ligne. Produits de qualité et livraison rapide.',
+  title: 'FAS - Boutique en ligne',
+  description: 'FAS - Votre boutique en ligne. Produits de qualité et livraison rapide.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'FASV2'
+    title: 'FAS'
   },
   formatDetection: {
     telephone: false

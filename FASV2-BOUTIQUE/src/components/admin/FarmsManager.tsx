@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 interface Farm {
-  _id?: string;
+  id?: number;
   name: string;
   description?: string;
 }
@@ -24,7 +24,7 @@ export default function FarmsManager() {
   const loadFarms = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/cloudflare/farms');
+      const response = await fetch('/api/farms-simple');
       if (response.ok) {
         const data = await response.json();
         
@@ -66,7 +66,7 @@ export default function FarmsManager() {
     }
 
     try {
-      const url = editingFarm ? `/api/cloudflare/farms/${editingFarm._id}` : '/api/cloudflare/farms';
+      const url = editingFarm ? `/api/farms-simple/${editingFarm._id}` : '/api/farms-simple';
       const method = editingFarm ? 'PUT' : 'POST';
       
       console.log('💾 Sauvegarde farm:', { url, method, data: formData });
@@ -118,7 +118,7 @@ export default function FarmsManager() {
 
         console.log('🗑️ Suppression farm:', farmId);
         
-        const response = await fetch(`/api/cloudflare/farms/${farmId}`, {
+        const response = await fetch(`/api/farms-simple/${farmId}`, {
           method: 'DELETE',
         });
 

@@ -1,48 +1,51 @@
-import InfoPage from '@/components/InfoPage';
+'use client';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import BottomNav from '@/components/BottomNav';
-// MongoDB supprimé - utilise Cloudflare D1
+import InfoPage from '@/components/InfoPage';
 
-// Force la revalidation de la page toutes les 10 secondes
-export const revalidate = 10;
+export default function InfoPageClient() {
+  const [content, setContent] = useState('Chargement du contenu...');
+  const [loading, setLoading] = useState(true);
 
-async function getInfoContent() {
-  try {
-    // Récupérer depuis Cloudflare D1 via les API
-    const [settingsRes, pageRes] = await Promise.allSettled([
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cloudflare/settings`, { cache: 'no-store' }),
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cloudflare/pages/info`, { cache: 'no-store' })
-    ]);
+  useEffect(() => {
+    loadContent();
+    // Synchronisation temps réel
+    const interval = setInterval(loadContent, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-    const settings = settingsRes.status === 'fulfilled' && settingsRes.value.ok 
-      ? await settingsRes.value.json() 
-      : {};
+  const loadContent = async () => {
+    try {
+      const response = await fetch('/api/cloudflare/pages/info', { cache: 'no-store' });
+      
+      if (response.ok) {
+        const pageData = await response.json();
+        setContent(pageData.content || 'Bienvenue dans notre boutique FAS !');
+      } else {
+        setContent('Bienvenue dans notre boutique FAS !');
+      }
+    } catch (error) {
+      setContent('Bienvenue dans notre boutique FAS !');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const infoPage = pageRes.status === 'fulfilled' && pageRes.value.ok 
-      ? await pageRes.value.json() 
-      : { title: 'Informations', content: 'Bienvenue dans notre boutique !' };
-
-    return { settings, infoPage };
-  } catch (error) {
-    console.error('Erreur récupération contenu info:', error);
-    return {
-      settings: {},
-      infoPage: { title: 'Informations', content: 'Bienvenue dans notre boutique !' }
-    };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Chargement...</div>
+      </div>
+    );
   }
-}
 
-export default async function InfoPageComponent() {
-  const { settings, infoPage } = await getInfoContent();
-  
   return (
     <div className="main-container">
       <div className="global-overlay"></div>
       <div className="content-layer">
         <Header />
-        <InfoPage 
-          content={infoPage?.content || 'Aucun contenu disponible'}
-        />
+        <InfoPage content={content} />
         <BottomNav />
       </div>
     </div>

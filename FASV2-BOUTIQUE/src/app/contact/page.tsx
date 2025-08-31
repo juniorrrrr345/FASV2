@@ -1,56 +1,51 @@
-import ContactPage from '@/components/ContactPage';
+'use client';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import BottomNav from '@/components/BottomNav';
-// MongoDB supprimé - utilise Cloudflare D1
+import InfoPage from '@/components/InfoPage';
 
-// Force la revalidation de la page toutes les 10 secondes
-export const revalidate = 10;
+export default function ContactPageClient() {
+  const [content, setContent] = useState('Chargement du contenu...');
+  const [loading, setLoading] = useState(true);
 
-async function getContactData() {
-  try {
-    // Récupérer depuis Cloudflare D1 via les API
-    const [settingsRes, pageRes, socialRes] = await Promise.allSettled([
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cloudflare/settings`, { cache: 'no-store' }),
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cloudflare/pages/contact`, { cache: 'no-store' }),
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cloudflare/social-links/active`, { cache: 'no-store' })
-    ]);
+  useEffect(() => {
+    loadContent();
+    // Synchronisation temps réel
+    const interval = setInterval(loadContent, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-    const settings = settingsRes.status === 'fulfilled' && settingsRes.value.ok 
-      ? await settingsRes.value.json() 
-      : {};
+  const loadContent = async () => {
+    try {
+      const response = await fetch('/api/cloudflare/pages/contact', { cache: 'no-store' });
+      
+      if (response.ok) {
+        const pageData = await response.json();
+        setContent(pageData.content || 'Contactez FAS pour toute question.');
+      } else {
+        setContent('Contactez FAS pour toute question.');
+      }
+    } catch (error) {
+      setContent('Contactez FAS pour toute question.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const contactPage = pageRes.status === 'fulfilled' && pageRes.value.ok 
-      ? await pageRes.value.json() 
-      : { title: 'Contact', content: 'Contactez-nous pour toute question.' };
-
-    const socialLinks = socialRes.status === 'fulfilled' && socialRes.value.ok 
-      ? await socialRes.value.json() 
-      : [];
-
-    return { settings, contactPage, socialLinks };
-  } catch (error) {
-    console.error('Erreur récupération données contact:', error);
-    return {
-      settings: {},
-      contactPage: { title: 'Contact', content: 'Contactez-nous pour toute question.' },
-      socialLinks: []
-    };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Chargement...</div>
+      </div>
+    );
   }
-}
 
-export default async function ContactPageComponent() {
-  const { settings, contactPage, socialLinks } = await getContactData();
-  
   return (
     <div className="main-container">
       <div className="global-overlay"></div>
       <div className="content-layer">
         <Header />
-        <ContactPage 
-          content={contactPage?.content || 'Aucun contenu disponible'}
-          whatsappLink={settings?.contact_info || '#'}
-          socialLinks={socialLinks || []}
-        />
+        <InfoPage content={content} />
         <BottomNav />
       </div>
     </div>

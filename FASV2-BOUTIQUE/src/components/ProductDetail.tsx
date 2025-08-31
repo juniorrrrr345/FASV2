@@ -27,10 +27,10 @@ export default function ProductDetail({ product, onClose }: ProductDetailProps) 
     if (!product) return;
     
     addItem({
-      productId: product._id,
+      productId: product.id.toString(),
       productName: product.name,
       farm: product.farm,
-      image: product.image,
+      image: product.image_url,
       weight,
       price,
       originalPrice,
@@ -90,7 +90,7 @@ export default function ProductDetail({ product, onClose }: ProductDetailProps) 
         <div className="w-full h-full overflow-y-auto pb-20">
           {/* Image ou vidéo */}
           <div className="relative w-full aspect-square bg-black">
-            {product.video ? (
+            {product.video_url ? (
               <video 
                 className="w-full h-full object-contain"
                 autoPlay 
@@ -99,11 +99,11 @@ export default function ProductDetail({ product, onClose }: ProductDetailProps) 
                 playsInline
                 controls
               >
-                <source src={product.video} type="video/mp4" />
+                <source src={product.video_url} type="video/mp4" />
               </video>
             ) : (
               <img 
-                src={product.image} 
+                src={product.image_url} 
                 alt={product.name}
                 className="w-full h-full object-contain"
               />

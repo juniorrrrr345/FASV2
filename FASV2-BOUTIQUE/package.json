@@ -1,33 +1,35 @@
 {
-  "name": "FASV2-BOUTIQUE",
+  "name": "fas-boutique",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "create-d1": "./create-d1-database.sh",
+    "init-tables": "./init-d1-tables.sh",
+    "migrate-mongodb": "node migrate-mongodb-to-d1.js",
+    "deploy-setup": "./deploy-setup.sh"
   },
   "dependencies": {
-    "axios": "^1.11.0",
-    "dotenv": "^16.4.5",
-    "lucide-react": "^0.537.0",
-    "next": "14.2.30",
+    "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-hot-toast": "^2.5.2",
-    "sharp": "^0.34.3",
-    "zustand": "^5.0.7",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
-    "typescript": "^5",
-    "@types/node": "^20"
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.294.0",
+    "zustand": "^4.4.7",
+    "mongodb": "^6.3.0"
   },
   "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.30"
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
   }
 }

@@ -1,12 +1,12 @@
 import MediaDisplay from './MediaDisplay';
 
 interface Product {
-  _id: string;
+  id: number;
   name: string;
   farm: string;
   category: string;
-  image: string;
-  video?: string;
+  image_url: string;
+  video_url?: string;
   description?: string;
   prices: {
     "5g": number;
@@ -32,7 +32,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       {/* Container image avec badge */}
       <div className="relative aspect-square overflow-hidden">
         <MediaDisplay
-          url={product.image}
+          url={product.image_url}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           controls={false}
@@ -46,7 +46,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         </div>
         
         {/* Indicateur vidéo - responsive */}
-        {product.video && (
+        {product.video_url && (
           <div className="absolute top-2 right-2 bg-black/80 text-white p-1 sm:p-1.5 rounded-full shadow-lg">
             <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 6a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />

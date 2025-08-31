@@ -4,12 +4,12 @@ import MediaUploader from './MediaUploader';
 // CloudinaryUploader supprimé - utilise Cloudflare R2
 
 interface Product {
-  _id?: string;
+  id?: number;
   name: string;
   farm: string;
   category: string;
-  image: string;
-  video?: string;
+  image_url: string;
+  video_url?: string;
   prices: {
     [key: string]: number;
   };
@@ -17,7 +17,7 @@ interface Product {
     [key: string]: number;
   };
   description?: string;
-  isActive: boolean;
+  is_available: boolean;
 }
 
 const defaultPriceKeys = ['3g', '5g', '10g', '25g', '50g', '100g', '200g', '500g'];
@@ -63,7 +63,7 @@ export default function ProductsManager() {
       
       // Charger les produits
       console.log('📦 Chargement des produits...');
-      const productsRes = await fetch('/api/cloudflare/products');
+      const productsRes = await fetch('/api/products-simple');
       console.log('📦 Réponse produits:', productsRes.status);
       if (productsRes.ok) {
         const productsData = await productsRes.json();
@@ -76,7 +76,7 @@ export default function ProductsManager() {
 
       // Charger les catégories
       console.log('🏷️ Chargement des catégories...');
-      const categoriesRes = await fetch('/api/cloudflare/categories');
+      const categoriesRes = await fetch('/api/categories-simple');
       console.log('🏷️ Réponse catégories:', categoriesRes.status);
       if (categoriesRes.ok) {
         const categoriesData = await categoriesRes.json();
@@ -89,7 +89,7 @@ export default function ProductsManager() {
 
       // Charger les farms
       console.log('🏭 Chargement des farms...');
-      const farmsRes = await fetch('/api/cloudflare/farms');
+      const farmsRes = await fetch('/api/farms-simple');
       console.log('🏭 Réponse farms:', farmsRes.status);
       if (farmsRes.ok) {
         const farmsData = await farmsRes.json();
@@ -223,7 +223,7 @@ export default function ProductsManager() {
     }
     
     // Vérifier que nous avons bien une image
-    if (!formData.image) {
+    if (!formData.image_url) {
       alert('Veuillez ajouter une image au produit');
       return;
     }
@@ -307,7 +307,7 @@ export default function ProductsManager() {
         promotions: finalPromotions
       };
 
-      const url = editingProduct ? `/api/cloudflare/products/${editingProduct._id}` : '/api/cloudflare/products';
+      const url = editingProduct ? `/api/products-simple/${editingProduct._id}` : '/api/products-simple';
       const method = editingProduct ? 'PUT' : 'POST';
       
       // Vérifier la taille de la requête avant envoi
@@ -420,7 +420,7 @@ export default function ProductsManager() {
       document.body.appendChild(loadingMsg);
 
       // Envoyer la requête de suppression AVANT de mettre à jour l'interface
-      const response = await fetch(`/api/cloudflare/products/${productId}`, {
+      const response = await fetch(`/api/products-simple/${productId}`, {
         method: 'DELETE',
       });
 
@@ -745,7 +745,7 @@ export default function ProductsManager() {
                 {/* Image compacte */}
                 <div className="relative w-16 h-16 flex-shrink-0">
                   <img
-                    src={product.image}
+                    src={product.image_url}
                     alt={product.name}
                     className="w-full h-full object-cover rounded-lg"
                   />
@@ -808,14 +808,14 @@ export default function ProductsManager() {
           <div key={product._id} className="bg-gray-900/50 border border-white/20 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] backdrop-blur-sm">
             <div className="relative h-32">
               <img
-                src={product.image}
+                src={product.image_url}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-2 left-2 bg-white/90 text-black text-xs font-bold px-2 py-1 rounded-md">
                 {product.category}
               </div>
-              {product.video && (
+              {product.video_url && (
                 <div className="absolute top-2 right-2 bg-black/80 text-white p-1 rounded-full">
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 6a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
@@ -1016,18 +1016,18 @@ export default function ProductsManager() {
                     <div className="text-sm text-gray-400 mb-2">Ou entrer une URL manuellement :</div>
                     <input
                       type="text"
-                      value={formData.image || ''}
+                      value={formData.image_url || ''}
                       onChange={(e) => updateField('image', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                       placeholder="https://... ou data:image/..."
                     />
                     
                     {/* Préview de l'image */}
-                    {formData.image && (
+                    {formData.image_url && (
                       <div className="mt-3">
                         <div className="text-xs text-gray-400 mb-2">Aperçu :</div>
                         <img 
-                          src={formData.image} 
+                          src={formData.image_url} 
                           alt="Aperçu" 
                           className="w-32 h-20 object-cover rounded border border-white/20"
                           onError={(e) => {
@@ -1080,18 +1080,18 @@ export default function ProductsManager() {
                     <div className="text-sm text-gray-400 mb-2">Ou entrer une URL manuellement :</div>
                     <input
                       type="text"
-                      value={formData.video || ''}
+                      value={formData.video_url || ''}
                       onChange={(e) => updateField('video', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                       placeholder="https://... ou data:video/..."
                     />
                     
                     {/* Préview de la vidéo */}
-                    {formData.video && (
+                    {formData.video_url && (
                       <div className="mt-3">
                         <div className="text-xs text-gray-400 mb-2">Aperçu :</div>
                         <video 
-                          src={formData.video} 
+                          src={formData.video_url} 
                           className="w-32 h-20 object-cover rounded border border-white/20"
                           controls
                           muted
@@ -1291,14 +1291,14 @@ export default function ProductsManager() {
                       />
                       <input
                         type="text"
-                        value={formData.image || ''}
+                        value={formData.image_url || ''}
                         onChange={(e) => updateField('image', e.target.value)}
                         className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                         placeholder="URL de l'image..."
                       />
-                      {formData.image && (
+                      {formData.image_url && (
                         <img 
-                          src={formData.image} 
+                          src={formData.image_url} 
                           alt="Aperçu" 
                           className="w-32 h-20 object-cover rounded border border-white/20 mt-2"
                         />
@@ -1318,14 +1318,14 @@ export default function ProductsManager() {
                       />
                       <input
                         type="text"
-                        value={formData.video || ''}
+                        value={formData.video_url || ''}
                         onChange={(e) => updateField('video', e.target.value)}
                         className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                         placeholder="URL de la vidéo..."
                       />
-                      {formData.video && (
+                      {formData.video_url && (
                         <video 
-                          src={formData.video} 
+                          src={formData.video_url} 
                           className="w-32 h-20 object-cover rounded border border-white/20 mt-2"
                           controls
                           muted

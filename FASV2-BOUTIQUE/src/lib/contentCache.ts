@@ -50,9 +50,9 @@ class ContentCache {
       // Charger depuis les routes API Cloudflare avec cache no-store
       const [settingsRes, productsRes, categoriesRes, farmsRes, socialLinksRes, pagesRes] = await Promise.allSettled([
         fetch('/api/cloudflare/settings', { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
-        fetch('/api/cloudflare/products', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
-        fetch('/api/cloudflare/categories', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
-        fetch('/api/cloudflare/farms', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
+        fetch('/api/products-simple', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
+        fetch('/api/categories-simple', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
+        fetch('/api/farms-simple', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
         fetch('/api/cloudflare/social-links', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
         fetch('/api/cloudflare/pages', { cache: 'no-store' }).then(r => r.ok ? r.json() : [])
       ]);

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
-// Redéploiement forcé - Nouveau chargement CALITEK
+// Redéploiement forcé - Nouveau chargement FAS
 import CategoryFilter from '../components/CategoryFilter';
 import ProductCard, { Product } from '../components/ProductCard';
 import ProductDetail from '../components/ProductDetail';
@@ -108,9 +108,9 @@ export default function HomePage() {
       console.log('🔄 Rechargement données...');
       
       const [productsRes, categoriesRes, farmsRes] = await Promise.all([
-        fetch('/api/cloudflare/products', { cache: 'no-store' }),
-        fetch('/api/cloudflare/categories', { cache: 'no-store' }),
-        fetch('/api/cloudflare/farms', { cache: 'no-store' })
+        fetch('/api/products-simple', { cache: 'no-store' }),
+        fetch('/api/categories-simple', { cache: 'no-store' }),
+        fetch('/api/farms-simple', { cache: 'no-store' })
       ]);
 
       if (productsRes.ok) {
@@ -159,9 +159,9 @@ export default function HomePage() {
     const loadFreshData = async () => {
       try {
         const [productsRes, categoriesRes, farmsRes] = await Promise.all([
-          fetch('/api/cloudflare/products', { cache: 'no-store' }),
-          fetch('/api/cloudflare/categories', { cache: 'no-store' }),
-          fetch('/api/cloudflare/farms', { cache: 'no-store' })
+          fetch('/api/products-simple', { cache: 'no-store' }),
+          fetch('/api/categories-simple', { cache: 'no-store' }),
+          fetch('/api/farms-simple', { cache: 'no-store' })
         ]);
 
         if (productsRes.ok) {
@@ -269,14 +269,14 @@ export default function HomePage() {
               <div className="mb-8">
                 <img 
                   src="https://i.imgur.com/s1rsguc.jpeg" 
-                  alt="CALITEK" 
+                  alt="FAS" 
                   className="h-32 sm:h-40 md:h-48 w-auto mx-auto"
                   style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}
                 />
               </div>
               
               <p className="text-2xl text-white mb-8 font-semibold drop-shadow-lg animate-pulse">
-                CALITEK
+                FAS
               </p>
               
               {/* Nouvelle barre de chargement style néon */}
@@ -286,7 +286,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                   </div>
                 </div>
-                <div className="mt-2 text-sm text-blue-300 font-medium drop-shadow-md animate-pulse">Chargement en cours...</div>
+                <div className="mt-2 text-sm text-blue-300 font-medium drop-shadow-md animate-pulse">Chargement de FAS INDUSTRY...</div>
               </div>
               
               {/* Animation de particules style diamant */}
@@ -298,7 +298,7 @@ export default function HomePage() {
               
               {/* Footer */}
               <div className="text-white text-sm font-medium drop-shadow-md">
-                <p>© 2025 CALITEK</p>
+                <p>© 2025 FAS</p>
               </div>
             </div>
           </div>
