@@ -17,6 +17,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "aws-sdk": "^2.1692.0",
     "lucide-react": "^0.294.0",
     "mongodb": "^6.19.0",
     "next": "14.0.3",
