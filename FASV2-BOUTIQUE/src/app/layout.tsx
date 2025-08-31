@@ -139,12 +139,13 @@ export default function RootLayout({
                           apiSettings.backgroundBlur || apiSettings.background_blur || 5
                         );
                         
-                        // Mettre à jour aussi le logo de chargement s'il existe
-                        const logoElements = document.querySelectorAll('img[alt="FAS"]');
+                        // Mettre à jour aussi le logo de chargement (div avec background)
+                        const logoElements = document.querySelectorAll('[style*="backgroundImage"]');
                         logoElements.forEach(logo => {
-                          if (logo.src !== (apiSettings.backgroundImage || apiSettings.background_image)) {
-                            logo.src = apiSettings.backgroundImage || apiSettings.background_image;
-                            console.log('🎨 Logo chargement mis à jour:', logo.src.substring(0, 30) + '...');
+                          const newBg = \`url(\${apiSettings.backgroundImage || apiSettings.background_image})\`;
+                          if (!logo.style.backgroundImage.includes(apiSettings.backgroundImage || apiSettings.background_image)) {
+                            logo.style.backgroundImage = newBg;
+                            console.log('🎨 Logo chargement mis à jour via background');
                           }
                         });
                       }
