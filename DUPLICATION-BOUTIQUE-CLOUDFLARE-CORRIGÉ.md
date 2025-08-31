@@ -420,6 +420,23 @@ node migrate-test-db.js
 echo "🧹 Nettoyage données test obligatoire..."
 ./clean-test-data.sh
 
+# 🔄 ÉTAPE 7.1 : CONVERSION CLOUDINARY → CLOUDFLARE R2 (OBLIGATOIRE)
+echo "🔄 Conversion URLs Cloudinary → Cloudflare R2..."
+
+# Convertir toutes les images Cloudinary → R2
+curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/7979421604bd07b3bd34d3ed96222512/d1/database/VOTRE-VRAI-UUID/query" \
+  -H "Authorization: Bearer ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW" \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "UPDATE products SET image_url = REPLACE(image_url, \"https://res.cloudinary.com/dfbv2sln2/image/upload/\", \"https://pub-b38679a01a274648827751df94818418.r2.dev/images/\") WHERE image_url LIKE \"%cloudinary%\";"}'
+
+# Convertir toutes les vidéos Cloudinary → R2
+curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/7979421604bd07b3bd34d3ed96222512/d1/database/VOTRE-VRAI-UUID/query" \
+  -H "Authorization: Bearer ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW" \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "UPDATE products SET video_url = REPLACE(video_url, \"https://res.cloudinary.com/dfbv2sln2/video/upload/\", \"https://pub-b38679a01a274648827751df94818418.r2.dev/videos/\") WHERE video_url LIKE \"%cloudinary%\";"}'
+
+echo "✅ URLs converties : Cloudinary → Cloudflare R2"
+
 # ⚡ ÉTAPE 7.5 : OPTIMISATION PERFORMANCE D1 (OBLIGATOIRE)
 echo "⚡ Optimisation performance D1 pour éviter surcharge..."
 
@@ -544,8 +561,8 @@ echo "✅ GARANTIES 100% TESTÉES :"
 echo ""
 echo "  🛍️  PRODUITS :"
 echo "    ✅ Affichage garanti sur page menu avec images/vidéos"
-echo "    ✅ Images Cloudflare R2 + imagedelivery.net supportées"
-echo "    ✅ Vidéos iframe Cloudflare + MP4 classiques supportées"
+echo "    ✅ Images Cloudflare R2 UNIQUEMENT (plus Cloudinary)"
+echo "    ✅ Vidéos Cloudflare R2 UNIQUEMENT (plus Cloudinary)"
 echo "    ✅ Panel admin CRUD complet (ajouter/modifier/supprimer)"
 echo "    ✅ Champs URL pour saisie directe images/vidéos"
 echo "    ✅ Synchronisation temps réel admin ↔ boutique (2 secondes max)"
