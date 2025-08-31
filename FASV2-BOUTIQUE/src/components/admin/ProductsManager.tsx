@@ -1024,8 +1024,8 @@ export default function ProductsManager() {
                         <MediaUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'image') {
-                              updateField('image', url);
                               updateField('image_url', url);
+                              console.log('✅ Image uploadée, URL mise à jour:', url);
                             }
                           }}
                           acceptedTypes="image/*"
@@ -1039,8 +1039,8 @@ export default function ProductsManager() {
                         <MediaUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'image') {
-                              updateField('image', url);
                               updateField('image_url', url);
+                              console.log('✅ Image uploadée, URL mise à jour:', url);
                             }
                           }}
                           acceptedTypes="image/*"
@@ -1127,8 +1127,8 @@ export default function ProductsManager() {
                         <MediaUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'video') {
-                              updateField('video', url);
                               updateField('video_url', url);
+                              console.log('✅ Vidéo uploadée, URL mise à jour:', url);
                             }
                           }}
                           acceptedTypes="video/*,.mov,.avi,.3gp"
@@ -1142,8 +1142,8 @@ export default function ProductsManager() {
                         <MediaUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'video') {
-                              updateField('video', url);
                               updateField('video_url', url);
+                              console.log('✅ Vidéo uploadée, URL mise à jour:', url);
                             }
                           }}
                           acceptedTypes="video/*"
@@ -1360,7 +1360,8 @@ export default function ProductsManager() {
                       <MediaUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
-                            updateField('image', url);
+                            updateField('image_url', url);
+                            console.log('✅ Image uploadée, URL mise à jour:', url);
                           }
                         }}
                         acceptedTypes="image/*"
@@ -1387,7 +1388,8 @@ export default function ProductsManager() {
                       <MediaUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
-                            updateField('video', url);
+                            updateField('video_url', url);
+                            console.log('✅ Vidéo uploadée, URL mise à jour:', url);
                           }
                         }}
                         acceptedTypes="video/*"
