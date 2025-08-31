@@ -1021,13 +1021,13 @@ export default function ProductsManager() {
                     </div>
                     
                     {/* Champ URL manuel OBLIGATOIRE */}
-                    <div className="text-sm text-yellow-400 mb-2 font-semibold">⚠️ URL IMAGE OBLIGATOIRE (Cloudflare R2) :</div>
+                    <div className="text-sm text-yellow-400 mb-2 font-semibold">⚠️ URL IMAGE OBLIGATOIRE :</div>
                     <input
                       type="text"
                       value={formData.image_url || ''}
                       onChange={(e) => updateField('image_url', e.target.value)}
                       className="w-full bg-gray-800 border-2 border-yellow-500/50 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/images/votre-image.jpg"
+                      placeholder="https://res.cloudinary.com/... ou https://pub-b38679a01a274648827751df94818418.r2.dev/images/..."
                       required
                     />
                     
