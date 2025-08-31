@@ -25,7 +25,27 @@ export default function HomePage() {
   
   // États pour les données - Initialiser avec des valeurs par défaut
   const [loading, setLoading] = useState(true); // Toujours true au départ
-  const [logoImage, setLogoImage] = useState('https://i.imgur.com/s1rsguc.jpeg'); // Image par défaut
+  // Initialiser le logo IMMÉDIATEMENT depuis localStorage
+  const getInitialLogo = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem('shopSettings');
+        if (cached) {
+          const settings = JSON.parse(cached);
+          const bgImage = settings.backgroundImage || settings.background_image;
+          if (bgImage) {
+            console.log('🎨 Logo initialisé depuis cache:', bgImage.substring(0, 30) + '...');
+            return bgImage;
+          }
+        }
+      } catch (e) {
+        console.error('Erreur init logo:', e);
+      }
+    }
+    return 'https://i.imgur.com/s1rsguc.jpeg'; // Fallback
+  };
+  
+  const [logoImage, setLogoImage] = useState(getInitialLogo());
   
   // Gérer la logique de première visite côté client uniquement
   useEffect(() => {
@@ -139,37 +159,46 @@ export default function HomePage() {
   // Synchronisation avec l'admin
   useAdminSync(loadAllData);
 
-  // CHARGEMENT LOGO DEPUIS SETTINGS ADMIN
+  // CHARGEMENT LOGO INSTANTANÉ DEPUIS SETTINGS ADMIN
   useEffect(() => {
-    const loadLogoFromSettings = async () => {
+    const loadLogoInstant = async () => {
       try {
-        // Charger depuis localStorage d'abord
+        // 1. Charger IMMÉDIATEMENT depuis localStorage si disponible
         const cachedSettings = localStorage.getItem('shopSettings');
         if (cachedSettings) {
           const settings = JSON.parse(cachedSettings);
           const bgImage = settings.backgroundImage || settings.background_image;
           if (bgImage) {
             setLogoImage(bgImage);
+            console.log('🎨 Logo chargé depuis cache:', bgImage.substring(0, 50) + '...');
           }
         }
         
-        // Puis charger depuis l'API pour être sûr
+        // 2. Charger depuis l'API en parallèle pour données fraîches
         const response = await fetch('/api/cloudflare/settings', { cache: 'no-store' });
         if (response.ok) {
           const settings = await response.json();
           const bgImage = settings.backgroundImage || settings.background_image;
-          if (bgImage) {
+          if (bgImage && bgImage !== logoImage) {
             setLogoImage(bgImage);
             localStorage.setItem('shopSettings', JSON.stringify(settings));
+            console.log('🎨 Logo mis à jour depuis API:', bgImage.substring(0, 50) + '...');
           }
         }
       } catch (error) {
         console.error('Erreur chargement logo:', error);
+        // Garder l'image par défaut en cas d'erreur
       }
     };
     
-    loadLogoFromSettings();
-  }, []);
+    // Charger le logo IMMÉDIATEMENT
+    loadLogoInstant();
+    
+    // Recharger le logo toutes les 2 secondes pour synchronisation
+    const logoInterval = setInterval(loadLogoInstant, 2000);
+    
+    return () => clearInterval(logoInterval);
+  }, [logoImage]);
 
   // CHARGEMENT INSTANTANÉ DEPUIS L'API (DONNÉES FRAÎCHES)
   useEffect(() => {
