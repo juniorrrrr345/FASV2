@@ -269,7 +269,7 @@ class CloudflareD1Client {
 // Instance globale
 const d1Client = new CloudflareD1Client({
   accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512',
-  databaseId: process.env.CLOUDFLARE_DATABASE_ID || 'VOTRE-UUID',
+  databaseId: process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb',
   apiToken: process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW',
 });
 
