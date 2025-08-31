@@ -222,7 +222,7 @@ export default function HomePage() {
               {/* Logo carré = image de fond de la boutique */}
               <div className="mb-8">
                 <img 
-                  src="https://i.imgur.com/s1rsguc.jpeg"
+                  src="https://pub-b38679a01a274648827751df94818418.r2.dev/images/1756654233249-vdc0hme52d.jpeg"
                   alt="FAS" 
                   className="h-32 sm:h-40 md:h-48 w-32 sm:w-40 md:w-48 mx-auto rounded-xl object-cover border-4 border-white/20"
                   style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}
