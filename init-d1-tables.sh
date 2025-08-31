@@ -2,7 +2,7 @@
 
 # 🗄️ INITIALISATION TABLES D1 POUR FAS
 ACCOUNT_ID="7979421604bd07b3bd34d3ed96222512"
-DATABASE_ID="VOTRE-UUID"  # ⚠️ Sera remplacé automatiquement
+DATABASE_ID="78d6725a-cd0f-46f9-9fa4-25ca4faa3efb"  # ⚠️ Sera remplacé automatiquement
 API_TOKEN="ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW"
 BASE_URL="https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/d1/database/$DATABASE_ID/query"
 
