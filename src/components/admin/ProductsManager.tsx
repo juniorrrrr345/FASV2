@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import MediaUploader from './MediaUploader';
+import QuickCreateModal from './QuickCreateModal';
 // CloudinaryUploader supprimé - utilise Cloudflare R2
 
 interface Product {
@@ -51,6 +52,10 @@ export default function ProductsManager() {
   const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // États pour les modales de création rapide
+  const [showQuickCreateModal, setShowQuickCreateModal] = useState(false);
+  const [quickCreateType, setQuickCreateType] = useState<'category' | 'farm'>('category');
 
   useEffect(() => {
     loadData();
@@ -641,6 +646,24 @@ export default function ProductsManager() {
     }
   };
 
+  // Fonctions pour la création rapide
+  const handleQuickCreate = (type: 'category' | 'farm') => {
+    setQuickCreateType(type);
+    setShowQuickCreateModal(true);
+  };
+
+  const handleQuickCreateSuccess = async (name: string) => {
+    // Recharger les données pour inclure le nouvel élément
+    await loadData();
+    
+    // Sélectionner automatiquement le nouvel élément dans le formulaire
+    if (quickCreateType === 'category') {
+      setFormData(prev => ({ ...prev, category: name }));
+    } else {
+      setFormData(prev => ({ ...prev, farm: name }));
+    }
+  };
+
   const removePrice = (priceKey: string) => {
     setFormData(prev => {
       const newPrices = { ...prev.prices };
@@ -946,7 +969,17 @@ export default function ProductsManager() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Catégorie</label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-gray-300">Catégorie</label>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickCreate('category')}
+                      className="bg-blue-600/20 border border-blue-400/30 hover:bg-blue-600/40 text-blue-300 text-xs py-1 px-2 rounded transition-all duration-200"
+                      title="Créer une nouvelle catégorie"
+                    >
+                      ➕ Nouvelle
+                    </button>
+                  </div>
                   <select
                     value={formData.category || ''}
                     onChange={(e) => updateField('category', e.target.value)}
@@ -960,7 +993,17 @@ export default function ProductsManager() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Farm</label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-gray-300">Farm</label>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickCreate('farm')}
+                      className="bg-green-600/20 border border-green-400/30 hover:bg-green-600/40 text-green-300 text-xs py-1 px-2 rounded transition-all duration-200"
+                      title="Créer une nouvelle farm"
+                    >
+                      ➕ Nouvelle
+                    </button>
+                  </div>
                   <select
                     value={formData.farm || ''}
                     onChange={(e) => updateField('farm', e.target.value)}
@@ -1302,7 +1345,17 @@ export default function ProductsManager() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Catégorie</label>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-300">Catégorie</label>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickCreate('category')}
+                          className="bg-blue-600/20 border border-blue-400/30 hover:bg-blue-600/40 text-blue-300 text-xs py-1 px-2 rounded transition-all duration-200"
+                          title="Créer une nouvelle catégorie"
+                        >
+                          ➕ Nouvelle
+                        </button>
+                      </div>
                       <select
                         value={formData.category || ''}
                         onChange={(e) => updateField('category', e.target.value)}
@@ -1316,7 +1369,17 @@ export default function ProductsManager() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Farm</label>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-300">Farm</label>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickCreate('farm')}
+                          className="bg-green-600/20 border border-green-400/30 hover:bg-green-600/40 text-green-300 text-xs py-1 px-2 rounded transition-all duration-200"
+                          title="Créer une nouvelle farm"
+                        >
+                          ➕ Nouvelle
+                        </button>
+                      </div>
                       <select
                         value={formData.farm || ''}
                         onChange={(e) => updateField('farm', e.target.value)}
@@ -1512,6 +1575,14 @@ export default function ProductsManager() {
           </div>
         </div>
       )}
+
+      {/* Modal de création rapide */}
+      <QuickCreateModal
+        isOpen={showQuickCreateModal}
+        onClose={() => setShowQuickCreateModal(false)}
+        type={quickCreateType}
+        onSuccess={handleQuickCreateSuccess}
+      />
     </div>
   );
 }

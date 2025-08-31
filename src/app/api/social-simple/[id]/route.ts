@@ -26,27 +26,13 @@ const executeSQL = async (sql: string, params: any[] = []) => {
   return response.json();
 };
 
-export async function GET() {
-  try {
-    const data = await executeSQL(
-      'SELECT id, name, url, icon, color, is_active, sort_order, created_at, updated_at FROM social_links WHERE (is_active = 1 OR is_active = "true" OR is_active IS NULL) ORDER BY sort_order ASC'
-    );
-    
-    if (data.success && data.result?.[0]?.results) {
-      return NextResponse.json(data.result[0].results);
-    } else {
-      return NextResponse.json([]);
-    }
-  } catch (error) {
-    console.error('❌ Erreur API réseaux sociaux:', error);
-    return NextResponse.json([], { status: 500 });
-  }
-}
-
-export async function POST(request: NextRequest) {
+// PUT - Modifier un lien social
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    console.log('🌐 Création lien social:', body);
+    const linkId = params.id;
+    
+    console.log('📝 Modification lien social:', linkId, body);
     
     // Validation des champs obligatoires
     if (!body.name || !body.url || !body.icon) {
@@ -56,8 +42,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vérifier si le lien existe déjà
-    const existingData = await executeSQL('SELECT id FROM social_links WHERE name = ? OR url = ?', [body.name, body.url]);
+    // Vérifier si un autre lien avec le même nom/URL existe
+    const existingData = await executeSQL('SELECT id FROM social_links WHERE (name = ? OR url = ?) AND id != ?', [body.name, body.url, linkId]);
     if (existingData.result?.[0]?.results?.length > 0) {
       return NextResponse.json(
         { error: 'Un lien social avec ce nom ou cette URL existe déjà' },
@@ -65,14 +51,11 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Obtenir le prochain ordre de tri
-    const maxOrderData = await executeSQL('SELECT MAX(sort_order) as max_order FROM social_links');
-    const nextOrder = (maxOrderData.result?.[0]?.results?.[0]?.max_order || 0) + 1;
-    
-    // Insérer le lien social
-    const insertSQL = `
-      INSERT INTO social_links (name, url, icon, color, is_active, sort_order, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+    // Mettre à jour le lien social
+    const updateSQL = `
+      UPDATE social_links SET
+        name = ?, url = ?, icon = ?, color = ?, is_active = ?, updated_at = datetime('now')
+      WHERE id = ?
     `;
     
     const params = [
@@ -81,25 +64,46 @@ export async function POST(request: NextRequest) {
       body.icon,
       body.color || '#0088cc',
       body.is_active !== false ? 1 : 0,
-      nextOrder
+      linkId
     ];
 
-    const result = await executeSQL(insertSQL, params);
+    const result = await executeSQL(updateSQL, params);
     
     if (result.success) {
-      console.log('✅ Lien social créé avec succès');
-      return NextResponse.json({ 
-        success: true, 
-        id: result.result?.[0]?.meta?.last_row_id,
-        name: body.name
-      });
+      console.log('✅ Lien social modifié avec succès');
+      return NextResponse.json({ success: true });
     } else {
-      throw new Error('Échec de l\'insertion');
+      throw new Error('Échec de la modification');
     }
   } catch (error) {
-    console.error('❌ Erreur création lien social:', error);
+    console.error('❌ Erreur modification lien social:', error);
     return NextResponse.json(
-      { error: 'Erreur lors de la création du lien social' },
+      { error: 'Erreur lors de la modification du lien social' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Supprimer un lien social
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const linkId = params.id;
+    console.log('🗑️ Suppression lien social:', linkId);
+    
+    // Supprimer le lien social
+    const deleteSQL = 'DELETE FROM social_links WHERE id = ?';
+    const result = await executeSQL(deleteSQL, [linkId]);
+    
+    if (result.success) {
+      console.log('✅ Lien social supprimé avec succès');
+      return NextResponse.json({ success: true });
+    } else {
+      throw new Error('Échec de la suppression');
+    }
+  } catch (error) {
+    console.error('❌ Erreur suppression lien social:', error);
+    return NextResponse.json(
+      { error: 'Erreur lors de la suppression du lien social' },
       { status: 500 }
     );
   }
