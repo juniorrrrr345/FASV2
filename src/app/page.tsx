@@ -240,7 +240,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                   </div>
                 </div>
-                <div className="mt-2 text-sm text-blue-300 font-medium drop-shadow-md animate-pulse">Chargement de FAS INDUSTRY...</div>
+                <div className="mt-2 text-sm text-blue-300 font-medium drop-shadow-md animate-pulse">Chargement...</div>
               </div>
               
               {/* Animation de particules style diamant */}
@@ -252,7 +252,7 @@ export default function HomePage() {
               
               {/* Footer */}
               <div className="text-white text-sm font-medium drop-shadow-md">
-                <p>© 2025 FAS</p>
+                <p>FAS</p>
               </div>
             </div>
           </div>
