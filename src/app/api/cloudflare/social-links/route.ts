@@ -4,15 +4,35 @@ import d1Client from '../../../../lib/cloudflare-d1';
 // GET - Récupérer tous les liens sociaux
 export async function GET() {
   try {
-    // Pour l'admin : récupérer TOUS les liens (actifs et inactifs)
-    const allLinks = await d1Client.findMany('social_links', {}, 'sort_order ASC');
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
     
-    console.log('🌐 Liens sociaux récupérés:', allLinks);
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
     
-    return NextResponse.json(allLinks || []);
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        sql: 'SELECT * FROM social_links ORDER BY sort_order ASC'
+      })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success && data.result?.[0]?.results) {
+      console.log('🌐 Liens sociaux récupérés:', data.result[0].results.length);
+      return NextResponse.json(data.result[0].results);
+    } else {
+      return NextResponse.json([]);
+    }
   } catch (error) {
     console.error('Erreur récupération liens sociaux:', error);
-    // Retourner un tableau vide en cas d'erreur
     return NextResponse.json([]);
   }
 }
