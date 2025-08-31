@@ -138,16 +138,10 @@ export default function HomePage() {
   // Synchronisation avec l'admin
   useAdminSync(loadAllData);
 
-  // CHARGEMENT INSTANTANÉ DEPUIS LE CACHE
+  // CHARGEMENT INSTANTANÉ DEPUIS L'API (PAS DE CACHE)
   useEffect(() => {
-    // 1. D'abord charger depuis le cache pour affichage immédiat
-    const cachedProducts = contentCache.getProducts();
-    const cachedCategories = contentCache.getCategories();
-    const cachedFarms = contentCache.getFarms();
-    
-    if (cachedProducts.length > 0) {
-      setProducts(cachedProducts);
-    }
+    // Charger IMMÉDIATEMENT depuis l'API pour données fraîches
+    loadAllData();
     if (cachedCategories.length > 0) {
       setCategories(['Toutes les catégories', ...cachedCategories.map((c: any) => c.name)]);
     }
