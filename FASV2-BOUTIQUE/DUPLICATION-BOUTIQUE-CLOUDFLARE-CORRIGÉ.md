@@ -333,10 +333,10 @@ EOF
 echo "⚡ Correction synchronisation instantanée..."
 
 # Page principale - 2 secondes au lieu de 5
-sed -i 's/setInterval(loadAllData, 5000)/setInterval(loadAllData, 2000)/g' src/app/page.tsx
-sed -i 's/setInterval(loadData, 5000)/setInterval(loadData, 1000)/g' src/app/info/page.tsx
-sed -i 's/setInterval(loadContent, 5000)/setInterval(loadContent, 1000)/g' src/app/contact/page.tsx
-sed -i 's/setInterval(loadData, 5000)/setInterval(loadData, 1000)/g' src/app/social/page.tsx
+sed -i 's/setInterval(loadAllData, 5000)/setInterval(loadAllData, 30000)/g' src/app/page.tsx
+sed -i 's/setInterval(loadData, 5000)/setInterval(loadData, 30000)/g' src/app/info/page.tsx
+sed -i 's/setInterval(loadContent, 5000)/setInterval(loadContent, 30000)/g' src/app/contact/page.tsx
+sed -i 's/setInterval(loadData, 5000)/setInterval(loadData, 30000)/g' src/app/social/page.tsx
 
 # GlobalBackgroundProvider - 1 seconde pour fond d'image
 sed -i 's/setInterval(loadSettingsFromAPI, 5000)/setInterval(loadSettingsFromAPI, 1000)/g' src/components/GlobalBackgroundProvider.tsx
@@ -420,6 +420,29 @@ node migrate-test-db.js
 echo "🧹 Nettoyage données test obligatoire..."
 ./clean-test-data.sh
 
+# ⚡ ÉTAPE 7.5 : OPTIMISATION PERFORMANCE D1 (OBLIGATOIRE)
+echo "⚡ Optimisation performance D1 pour éviter surcharge..."
+
+# 1. Réduire fréquence de synchronisation admin (30 secondes au lieu de 2)
+sed -i 's/2000); \/\/ Toutes les 2 secondes/30000); \/\/ Toutes les 30 secondes - Optimisé/g' src/hooks/useAdminSync.ts
+
+# 2. Optimiser le cache (5 minutes au lieu de 5 secondes)
+sed -i 's/5000; \/\/ 5 secondes/300000; \/\/ 5 minutes - Optimisé/g' src/lib/contentCache.ts
+sed -i 's/5000); \/\/ Toutes les 5 secondes/300000); \/\/ Toutes les 5 minutes - Optimisé/g' src/lib/contentCache.ts
+
+# 3. Optimiser GlobalBackgroundProvider (30 secondes au lieu de 1)
+sed -i 's/setInterval(loadSettingsFromAPI, 1000)/setInterval(loadSettingsFromAPI, 30000)/g' src/components/GlobalBackgroundProvider.tsx
+
+# 4. Optimiser page principale (30 secondes au lieu de 2)
+sed -i 's/setInterval(loadAllData, 2000)/setInterval(loadAllData, 30000)/g' src/app/page.tsx
+
+# 5. Optimiser pages (30 secondes au lieu de 1)
+sed -i 's/setInterval(loadData, 1000)/setInterval(loadData, 30000)/g' src/app/info/page.tsx
+sed -i 's/setInterval(loadContent, 1000)/setInterval(loadContent, 30000)/g' src/app/contact/page.tsx
+sed -i 's/setInterval(loadData, 1000)/setInterval(loadData, 30000)/g' src/app/social/page.tsx
+
+echo "✅ Performance optimisée - Réduction 95% des requêtes D1"
+
 # 🎨 ÉTAPE 8 : CORRECTION LOGO ET TEXTES OBLIGATOIRE
 echo "🎨 Correction logo et textes..."
 
@@ -442,10 +465,15 @@ sed -i 's/INDUSTRY//g' src/app/page.tsx
 sed -i 's/© 2025 [A-Z]*/VOTRE-NOM-BOUTIQUE/g' src/app/page.tsx
 sed -i 's/Chargement de .* INDUSTRY.*/Chargement.../g' src/app/page.tsx
 
-# 🚀 ÉTAPE 9 : DÉPLOYER
+# 🚀 ÉTAPE 9 : OPTIMISATION FINALE ET DÉPLOYER
+echo "⚡ Commit optimisations performance..."
 git init
 git add .
 git commit -m "🚀 Nouvelle Boutique VOTRE-NOM-BOUTIQUE - Ultra-complète SANS PROBLÈMES"
+
+# Optimisation finale pour réduire les requêtes D1
+git add .
+git commit -m "⚡ OPTIMISATION: Réduction 95% requêtes D1"
 
 # Connecter à GitHub (créez d'abord le repo)
 git remote add origin https://github.com/VOTRE-USERNAME/VOTRE-REPO.git
@@ -564,13 +592,13 @@ echo "    ✅ Panel admin : VOTRE-NOM-BOUTIQUE partout"
 echo "    ✅ Pages boutique : Nom personnalisé"
 echo "    ✅ Plus aucune trace de FAS/CALITEK nulle part"
 echo ""
-echo "  🔄  SYNCHRONISATION TEMPS RÉEL :"
-echo "    ✅ Admin → Client : 1-2 secondes maximum (pas 5)"
-echo "    ✅ Suppression : Disparition immédiate côté client"
-echo "    ✅ Ajout : Apparition immédiate côté client"
-echo "    ✅ Modification : Mise à jour temps réel"
-echo "    ✅ Cache intelligent : Pas d'écrasement de données"
-echo "    ✅ Notifications : Confirmations visuelles"
+echo "  🔄  SYNCHRONISATION OPTIMISÉE :"
+echo "    ✅ Admin → Client : 30 secondes (optimisé pour D1)"
+echo "    ✅ Suppression : Disparition côté client"
+echo "    ✅ Ajout : Apparition côté client"
+echo "    ✅ Modification : Mise à jour régulière"
+echo "    ✅ Cache intelligent : 5 minutes (évite surcharge)"
+echo "    ✅ Performance : 95% moins de requêtes D1"
 echo ""
 echo "  🎬  SUPPORT MÉDIAS COMPLET :"
 echo "    ✅ Images : JPG/PNG/WebP + Cloudflare R2 + imagedelivery.net"
@@ -588,7 +616,7 @@ echo "    ✅ Variables cache : Supprimées pour éviter erreurs"
 echo "    ✅ Logo CalTek : Remplacé par image de fond"
 echo "    ✅ Textes INDUSTRY : Supprimés et simplifiés"
 echo "    ✅ Données test : Nettoyées automatiquement"
-echo "    ✅ Synchronisation : Accélérée à 1-2 secondes"
+echo "    ✅ Synchronisation : Optimisée à 30 secondes (performance D1)"
 echo ""
 echo "🚀 Votre boutique sera 100% fonctionnelle dès le déploiement !"
 echo "🎯 Résultat : Boutique parfaite avec synchronisation temps réel complète SANS AUCUN PROBLÈME !"
