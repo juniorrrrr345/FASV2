@@ -975,13 +975,43 @@ export default function ProductsManager() {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Image du produit</label>
+                    <label className="block text-lg font-bold text-yellow-400 mb-3">🖼️ URL IMAGE PRODUIT (OBLIGATOIRE)</label>
+                    
+                    {/* Champ URL en premier - TRÈS VISIBLE */}
+                    <input
+                      type="text"
+                      value={formData.image_url || ''}
+                      onChange={(e) => updateField('image_url', e.target.value)}
+                      className="w-full bg-gray-900 border-3 border-yellow-500 text-white rounded-lg px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 mb-4"
+                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/images/votre-image.jpg"
+                      required
+                    />
+                    
+                    {/* Aperçu immédiat */}
+                    {formData.image_url && (
+                      <div className="mb-4">
+                        <img 
+                          src={formData.image_url} 
+                          alt="Aperçu" 
+                          className="w-32 h-32 object-cover rounded-lg border-2 border-green-500"
+                          onError={(e) => {
+                            e.currentTarget.style.border = '2px solid red';
+                            e.currentTarget.title = 'URL invalide';
+                          }}
+                          onLoad={(e) => {
+                            e.currentTarget.style.border = '2px solid green';
+                            e.currentTarget.title = 'Image valide';
+                          }}
+                        />
+                      </div>
+                    )}
+                    
                     <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-3 mb-3">
-                      <div className="text-xs text-blue-300 font-semibold mb-1">💡 POUR CLOUDFLARE R2 :</div>
+                      <div className="text-xs text-blue-300 font-semibold mb-1">💡 COMMENT OBTENIR L'URL :</div>
                       <div className="text-xs text-blue-200">
                         1. Uploadez votre image sur Cloudflare R2<br/>
                         2. Copiez l'URL publique<br/>
-                        3. Format: https://pub-b38679a01a274648827751df94818418.r2.dev/images/nom.jpg
+                        3. Collez ci-dessus
                       </div>
                     </div>
                     
@@ -1048,13 +1078,43 @@ export default function ProductsManager() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Vidéo du produit (optionnel)</label>
+                    <label className="block text-lg font-bold text-purple-400 mb-3">🎬 URL VIDÉO PRODUIT (OPTIONNEL)</label>
+                    
+                    {/* Champ URL vidéo en premier - TRÈS VISIBLE */}
+                    <input
+                      type="text"
+                      value={formData.video_url || ''}
+                      onChange={(e) => updateField('video_url', e.target.value)}
+                      className="w-full bg-gray-900 border-3 border-purple-500 text-white rounded-lg px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 mb-4"
+                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/videos/votre-video.mp4"
+                    />
+                    
+                    {/* Aperçu immédiat */}
+                    {formData.video_url && (
+                      <div className="mb-4">
+                        <video 
+                          src={formData.video_url} 
+                          className="w-32 h-24 object-cover rounded-lg border-2 border-green-500"
+                          controls
+                          muted
+                          onError={(e) => {
+                            e.currentTarget.style.border = '2px solid red';
+                            e.currentTarget.title = 'URL vidéo invalide';
+                          }}
+                          onLoadedData={(e) => {
+                            e.currentTarget.style.border = '2px solid green';
+                            e.currentTarget.title = 'Vidéo valide';
+                          }}
+                        />
+                      </div>
+                    )}
+                    
                     <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-3 mb-3">
-                      <div className="text-xs text-purple-300 font-semibold mb-1">💡 POUR CLOUDFLARE R2 :</div>
+                      <div className="text-xs text-purple-300 font-semibold mb-1">💡 COMMENT OBTENIR L'URL :</div>
                       <div className="text-xs text-purple-200">
                         1. Uploadez votre vidéo sur Cloudflare R2<br/>
                         2. Copiez l'URL publique<br/>
-                        3. Format: https://pub-b38679a01a274648827751df94818418.r2.dev/videos/nom.mp4
+                        3. Collez ci-dessus
                       </div>
                     </div>
                     
