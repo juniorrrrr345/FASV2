@@ -1027,7 +1027,7 @@ export default function ProductsManager() {
                       value={formData.image_url || ''}
                       onChange={(e) => updateField('image_url', e.target.value)}
                       className="w-full bg-gray-800 border-2 border-yellow-500/50 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/images/votre-image.jpg"
+                      placeholder="https://res.cloudinary.com/... ou https://pub-b38679a01a274648827751df94818418.r2.dev/images/..."
                       required
                     />
                     
@@ -1100,7 +1100,7 @@ export default function ProductsManager() {
                       value={formData.video_url || ''}
                       onChange={(e) => updateField('video_url', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/videos/votre-video.mp4"
+                      placeholder="https://res.cloudinary.com/... ou https://pub-b38679a01a274648827751df94818418.r2.dev/videos/..."
                     />
                     
                     {/* Préview de la vidéo */}
