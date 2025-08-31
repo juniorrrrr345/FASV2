@@ -75,35 +75,79 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Appliquer le background immédiatement depuis localStorage
+              // Appliquer le background immédiatement depuis localStorage OU API
               (function() {
+                function applyBackground(backgroundImage, backgroundOpacity = 20, backgroundBlur = 5) {
+                  const style = document.createElement('style');
+                  style.id = 'instant-background-style';
+                  style.textContent = \`
+                    html, body, .main-container, .min-h-screen {
+                      background-image: url(\${backgroundImage}) !important;
+                      background-size: cover !important;
+                      background-position: center !important;
+                      background-repeat: no-repeat !important;
+                      background-attachment: fixed !important;
+                      background-color: black !important;
+                    }
+                    .global-overlay {
+                      background-color: rgba(0, 0, 0, \${backgroundOpacity / 100}) !important;
+                      backdrop-filter: blur(\${backgroundBlur}px) !important;
+                      -webkit-backdrop-filter: blur(\${backgroundBlur}px) !important;
+                    }
+                    /* Appliquer aussi sur les pages de chargement */
+                    .loading-container, .loading-screen {
+                      background-image: url(\${backgroundImage}) !important;
+                      background-size: cover !important;
+                      background-position: center !important;
+                    }
+                  \`;
+                  
+                  // Supprimer l'ancien style s'il existe
+                  const oldStyle = document.getElementById('instant-background-style');
+                  if (oldStyle) oldStyle.remove();
+                  
+                  document.head.appendChild(style);
+                }
+                
                 try {
+                  // 1. Essayer depuis localStorage d'abord
                   const settings = localStorage.getItem('shopSettings');
                   if (settings) {
                     const parsed = JSON.parse(settings);
-                    if (parsed.backgroundImage) {
-                      const style = document.createElement('style');
-                      style.textContent = \`
-                        html, body, .main-container {
-                          background-image: url(\${parsed.backgroundImage}) !important;
-                          background-size: cover !important;
-                          background-position: center !important;
-                          background-repeat: no-repeat !important;
-                          background-attachment: fixed !important;
-                          background-color: black !important;
-                        }
-                        .global-overlay {
-                          background-color: rgba(0, 0, 0, \${(parsed.backgroundOpacity || 20) / 100}) !important;
-                          backdrop-filter: blur(\${parsed.backgroundBlur || 5}px) !important;
-                        }
-                      \`;
-                      document.head.appendChild(style);
+                    if (parsed.backgroundImage || parsed.background_image) {
+                      applyBackground(
+                        parsed.backgroundImage || parsed.background_image,
+                        parsed.backgroundOpacity || parsed.background_opacity || 20,
+                        parsed.backgroundBlur || parsed.background_blur || 5
+                      );
+                      return; // Arrêter ici si on a trouvé dans localStorage
                     }
                   }
-                  // Fond noir par défaut
+                  
+                  // 2. Si pas dans localStorage, charger depuis l'API
+                  fetch('/api/cloudflare/settings', { cache: 'no-store' })
+                    .then(response => response.json())
+                    .then(apiSettings => {
+                      if (apiSettings && (apiSettings.backgroundImage || apiSettings.background_image)) {
+                        // Sauvegarder dans localStorage
+                        localStorage.setItem('shopSettings', JSON.stringify(apiSettings));
+                        
+                        // Appliquer immédiatement
+                        applyBackground(
+                          apiSettings.backgroundImage || apiSettings.background_image,
+                          apiSettings.backgroundOpacity || apiSettings.background_opacity || 20,
+                          apiSettings.backgroundBlur || apiSettings.background_blur || 5
+                        );
+                      }
+                    })
+                    .catch(e => console.error('Erreur chargement fond API:', e));
+                  
+                  // Fond noir par défaut en attendant
                   document.documentElement.style.backgroundColor = 'black';
                   document.body.style.backgroundColor = 'black';
-                } catch (e) {}
+                } catch (e) {
+                  console.error('Erreur fond d\\'image:', e);
+                }
               })();
             `
           }}

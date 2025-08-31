@@ -1,33 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import d1Client from '../../../../lib/cloudflare-d1';
+import d1Simple from '../../../../lib/d1-simple';
 
 // GET - Récupérer les paramètres
 export async function GET() {
   try {
     console.log('🔍 GET settings...');
-    let settings = await d1Client.getSettings();
+    const settings = await d1Simple.getSettings();
     
-    // Si aucun paramètre n'existe, créer les paramètres par défaut
-    if (!settings) {
-      const defaultSettings = {
-        id: 1,
-        shop_name: 'CALITEK',
-        admin_password: 'admin123',
-        background_image: '',
-        background_opacity: 20,
-        background_blur: 5,
-        theme_color: '#000000',
-        contact_info: '',
-        shop_description: '',
-        loading_enabled: true,
-        loading_duration: 3000,
+    console.log('✅ Settings récupérés:', settings);
+    
+    if (settings) {
+      // Mapper les champs D1 vers le format attendu par le frontend
+      const mappedSettings = {
+        ...settings,
+        backgroundImage: settings.background_image,
+        backgroundOpacity: settings.background_opacity,
+        backgroundBlur: settings.background_blur,
+        shopTitle: settings.shop_name,
+        themeColor: settings.theme_color,
+        contactInfo: settings.contact_info,
+        whatsappLink: settings.whatsapp_link,
+        scrollingText: settings.scrolling_text
       };
       
-      settings = await d1Client.create('settings', defaultSettings);
+      return NextResponse.json(mappedSettings);
+    } else {
+      // Retourner des paramètres par défaut si rien trouvé
+      return NextResponse.json({
+        shop_name: 'FAS',
+        background_image: 'https://i.imgur.com/s1rsguc.jpeg',
+        background_opacity: 20,
+        background_blur: 5,
+        backgroundImage: 'https://i.imgur.com/s1rsguc.jpeg',
+        backgroundOpacity: 20,
+        backgroundBlur: 5
+      });
     }
-
-    console.log('✅ Settings récupérés:', settings);
-    return NextResponse.json(settings);
   } catch (error) {
     console.error('❌ Erreur GET settings:', error);
     return NextResponse.json(

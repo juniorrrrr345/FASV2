@@ -209,10 +209,10 @@ export default function HomePage() {
   // Écran de chargement avec fond de thème de la boutique
   if (loading) {
     return (
-      <div className="main-container">
+      <div className="main-container loading-container">
         <div className="global-overlay"></div>
         <div className="content-layer">
-          <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="min-h-screen loading-screen flex items-center justify-center p-4">
             <div className="text-center bg-black/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 max-w-lg mx-auto border border-white/20">
 
               
