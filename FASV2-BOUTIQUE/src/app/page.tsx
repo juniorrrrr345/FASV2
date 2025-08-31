@@ -138,63 +138,20 @@ export default function HomePage() {
   // Synchronisation avec l'admin
   useAdminSync(loadAllData);
 
-  // CHARGEMENT INSTANTANÉ DEPUIS L'API (PAS DE CACHE)
+  // CHARGEMENT INSTANTANÉ DEPUIS L'API (DONNÉES FRAÎCHES)
   useEffect(() => {
     // Charger IMMÉDIATEMENT depuis l'API pour données fraîches
     loadAllData();
-    if (cachedCategories.length > 0) {
-      setCategories(['Toutes les catégories', ...cachedCategories.map((c: any) => c.name)]);
-    }
-    if (cachedFarms.length > 0) {
-      setFarms(['Toutes les farms', ...cachedFarms.map((f: any) => f.name)]);
-    }
     
-    // 2. Charger les données fraîches en arrière-plan
-    const loadFreshData = async () => {
-      try {
-        const [productsRes, categoriesRes, farmsRes] = await Promise.all([
-          fetch('/api/products-simple', { cache: 'no-store' }),
-          fetch('/api/categories-simple', { cache: 'no-store' }),
-          fetch('/api/farms-simple', { cache: 'no-store' })
-        ]);
-
-        if (productsRes.ok) {
-          const productsData = await productsRes.json();
-          setProducts(productsData);
-          contentCache.updateProducts(productsData);
-        }
-
-        if (categoriesRes.ok) {
-          const categoriesData = await categoriesRes.json();
-          console.log('🏷️ Catégories reçues:', categoriesData);
-          const categoryNames = ['Toutes les catégories', ...categoriesData.map((c: any) => c.name)];
-          console.log('🏷️ Noms catégories:', categoryNames);
-          setCategories(categoryNames);
-        }
-
-        if (farmsRes.ok) {
-          const farmsData = await farmsRes.json();
-          setFarms(['Toutes les farms', ...farmsData.map((f: any) => f.name)]);
-          contentCache.updateFarms(farmsData);
-        }
-      } catch (error) {
-        console.error('Erreur chargement données fraîches:', error);
-      }
-    };
-    
-    loadFreshData();
-    
-    // Cacher le chargement après un délai plus long pour être sûr qu'il soit visible
+    // Cacher le chargement après délai
     const loadingTimeout = setTimeout(() => {
       setLoading(false);
-    }, 7000); // 7 secondes pour bien voir le chargement
+    }, 3000);
     
-    // Rafraîchir les données toutes les secondes pour synchronisation temps réel
+    // Rafraîchir les données toutes les 2 secondes pour synchronisation temps réel
     const interval = setInterval(() => {
-      loadFreshData();
-    }, 1000); // 1 seconde pour synchronisation instantanée
-    
-    // Écouter les changements de paramètres
+      loadAllData();
+    }, 2000);
     
     return () => {
       clearTimeout(loadingTimeout);
