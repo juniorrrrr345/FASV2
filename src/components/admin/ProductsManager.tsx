@@ -1021,7 +1021,7 @@ export default function ProductsManager() {
                     </div>
                     
                     {/* Champ URL manuel OBLIGATOIRE */}
-                    <div className="text-sm text-yellow-400 mb-2 font-semibold">⚠️ URL IMAGE OBLIGATOIRE (Cloudflare R2) :</div>
+                    <div className="text-sm text-yellow-400 mb-2 font-semibold">⚠️ URL IMAGE OBLIGATOIRE :</div>
                     <input
                       type="text"
                       value={formData.image_url || ''}
