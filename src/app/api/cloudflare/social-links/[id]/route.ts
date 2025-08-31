@@ -35,14 +35,17 @@ export async function PUT(
   try {
     const id = parseInt(params.id);
     const body = await request.json();
-    const { name, url, icon, is_active, sort_order } = body;
+    const { name, url, icon, color, is_active, sort_order } = body;
+
+    console.log('🌐 Modification lien social Cloudflare:', { id, name, url, icon, color, is_active });
 
     const updatedSocialLink = await d1Client.update('social_links', id, {
       name,
       url,
       icon,
+      color: color || '#0088cc',
       is_active: Boolean(is_active),
-      sort_order: parseInt(sort_order),
+      sort_order: parseInt(sort_order || 0),
     });
 
     return NextResponse.json(updatedSocialLink);

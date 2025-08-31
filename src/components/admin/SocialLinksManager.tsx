@@ -29,24 +29,37 @@ export default function SocialLinksManager() {
   const loadSocialLinks = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/social-simple');
+      console.log('🌐 Admin: Chargement des réseaux sociaux...');
+      
+      // Utiliser la même API que côté client pour la cohérence
+      const response = await fetch('/api/cloudflare/social-links', { cache: 'no-store' });
+      console.log('🌐 Admin: Réponse réseaux sociaux:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('🌐 Admin: Données brutes reçues:', data);
         
         // Adapter les données API (id → _id) pour compatibilité interface
         const adaptedData = data.map((link: any) => ({
           ...link,
-          _id: link.id?.toString() || link._id
+          _id: link.id?.toString() || link._id,
+          // S'assurer que tous les champs nécessaires existent
+          color: link.color || '#0088cc',
+          is_active: link.is_active !== false
         }));
         
-        console.log('🌐 Liens sociaux adaptés:', adaptedData);
+        console.log('🌐 Liens sociaux adaptés pour admin:', adaptedData);
         setSocialLinks(adaptedData);
         
         // Sauvegarder dans localStorage pour chargement instantané
         localStorage.setItem('socialLinks', JSON.stringify(adaptedData));
+      } else {
+        console.error('🌐 Admin: Erreur HTTP:', response.status);
+        setSocialLinks([]);
       }
     } catch (error) {
-      console.error('Erreur chargement liens sociaux:', error);
+      console.error('❌ Admin: Erreur chargement liens sociaux:', error);
+      setSocialLinks([]);
     } finally {
       setLoading(false);
     }
@@ -78,7 +91,7 @@ export default function SocialLinksManager() {
         return;
       }
 
-      const url = editingLink ? `/api/social-simple/${editingLink._id}` : '/api/social-simple';
+      const url = editingLink ? `/api/cloudflare/social-links/${editingLink._id}` : '/api/cloudflare/social-links';
       const method = editingLink ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
@@ -89,7 +102,7 @@ export default function SocialLinksManager() {
         body: JSON.stringify({
           ...formData,
           color: formData.color || '#0088cc',
-          is_active: true // Toujours actif
+          is_active: formData.is_active !== false // Respecter la valeur choisie
         }),
       });
 
@@ -141,7 +154,7 @@ export default function SocialLinksManager() {
         const originalLinks = [...socialLinks];
         setSocialLinks(prev => prev.filter(link => link._id !== linkId));
 
-        const response = await fetch(`/api/social-simple/${linkId}`, {
+        const response = await fetch(`/api/cloudflare/social-links/${linkId}`, {
           method: 'DELETE',
         });
 

@@ -29,7 +29,7 @@ const executeSQL = async (sql: string, params: any[] = []) => {
 export async function GET() {
   try {
     const data = await executeSQL(
-      'SELECT id, name, url, icon, color, is_active, sort_order, created_at, updated_at FROM social_links WHERE (is_active = 1 OR is_active = "true" OR is_active IS NULL) ORDER BY sort_order ASC'
+      'SELECT id, name, url, icon, color, is_active, sort_order, created_at, updated_at FROM social_links ORDER BY sort_order ASC'
     );
     
     if (data.success && data.result?.[0]?.results) {

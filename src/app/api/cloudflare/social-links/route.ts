@@ -17,7 +17,7 @@ export async function GET() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        sql: 'SELECT * FROM social_links ORDER BY sort_order ASC'
+        sql: 'SELECT id, name, url, icon, color, is_active, sort_order, created_at, updated_at FROM social_links WHERE (is_active = 1 OR is_active = "true" OR is_active IS NULL) ORDER BY sort_order ASC'
       })
     });
     
@@ -41,7 +41,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, url, icon = '🔗', is_active = true, sort_order = 0 } = body;
+    const { name, url, icon = '🔗', color = '#0088cc', is_active = true, sort_order = 0 } = body;
 
     if (!name || !url) {
       return NextResponse.json(
@@ -54,10 +54,12 @@ export async function POST(request: Request) {
       name,
       url,
       icon,
+      color,
       is_active: Boolean(is_active),
       sort_order: parseInt(sort_order),
     };
 
+    console.log('🌐 Création lien social Cloudflare:', socialLinkData);
     const newSocialLink = await d1Client.create('social_links', socialLinkData);
     return NextResponse.json(newSocialLink, { status: 201 });
   } catch (error) {
