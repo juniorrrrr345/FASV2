@@ -3,30 +3,19 @@ import d1Client from '../../../lib/cloudflare-d1';
 
 export async function GET() {
   try {
-    console.log('🧪 Test création catégorie...');
+    console.log('🧪 Test API désactivé - Données FAS propres');
     
-    // Test de création d'une catégorie
-    const testCategory = {
-      name: `Test-${Date.now()}`,
-      description: 'Catégorie de test',
-      icon: '🧪',
-      color: '#FF0000'
-    };
-    
-    const result = await d1Client.create('categories', testCategory);
-    
+    // API désactivée pour éviter les données de test
     return NextResponse.json({
       success: true,
-      message: 'Test création réussi',
-      result: result
+      message: 'API test désactivée - Données FAS propres',
+      note: 'Plus de création automatique de données de test'
     });
     
   } catch (error) {
-    console.error('❌ Test création échoué:', error);
     return NextResponse.json({
       success: false,
-      error: error.message,
-      details: error
-    }, { status: 500 });
+      error: 'API test désactivée'
+    }, { status: 200 });
   }
 }

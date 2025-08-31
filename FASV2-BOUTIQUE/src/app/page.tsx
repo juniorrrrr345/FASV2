@@ -25,6 +25,7 @@ export default function HomePage() {
   
   // États pour les données - Initialiser avec des valeurs par défaut
   const [loading, setLoading] = useState(true); // Toujours true au départ
+  const [logoImage, setLogoImage] = useState('https://i.imgur.com/s1rsguc.jpeg'); // Image par défaut
   
   // Gérer la logique de première visite côté client uniquement
   useEffect(() => {
@@ -138,6 +139,38 @@ export default function HomePage() {
   // Synchronisation avec l'admin
   useAdminSync(loadAllData);
 
+  // CHARGEMENT LOGO DEPUIS SETTINGS ADMIN
+  useEffect(() => {
+    const loadLogoFromSettings = async () => {
+      try {
+        // Charger depuis localStorage d'abord
+        const cachedSettings = localStorage.getItem('shopSettings');
+        if (cachedSettings) {
+          const settings = JSON.parse(cachedSettings);
+          const bgImage = settings.backgroundImage || settings.background_image;
+          if (bgImage) {
+            setLogoImage(bgImage);
+          }
+        }
+        
+        // Puis charger depuis l'API pour être sûr
+        const response = await fetch('/api/cloudflare/settings', { cache: 'no-store' });
+        if (response.ok) {
+          const settings = await response.json();
+          const bgImage = settings.backgroundImage || settings.background_image;
+          if (bgImage) {
+            setLogoImage(bgImage);
+            localStorage.setItem('shopSettings', JSON.stringify(settings));
+          }
+        }
+      } catch (error) {
+        console.error('Erreur chargement logo:', error);
+      }
+    };
+    
+    loadLogoFromSettings();
+  }, []);
+
   // CHARGEMENT INSTANTANÉ DEPUIS L'API (DONNÉES FRAÎCHES)
   useEffect(() => {
     // Charger IMMÉDIATEMENT depuis l'API pour données fraîches
@@ -216,13 +249,14 @@ export default function HomePage() {
             <div className="text-center bg-black/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 max-w-lg mx-auto border border-white/20">
 
               
-              {/* Logo transparent sans contour */}
+              {/* Logo dynamique depuis panel admin */}
               <div className="mb-8">
                 <img 
-                  src="https://i.imgur.com/s1rsguc.jpeg" 
+                  src={logoImage} 
                   alt="FAS" 
-                  className="h-32 sm:h-40 md:h-48 w-auto mx-auto"
+                  className="h-32 sm:h-40 md:h-48 w-auto mx-auto rounded-xl"
                   style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}
+                  onError={() => setLogoImage('https://i.imgur.com/s1rsguc.jpeg')}
                 />
               </div>
               
