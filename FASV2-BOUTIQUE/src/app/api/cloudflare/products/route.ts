@@ -1,111 +1,82 @@
 import { NextRequest, NextResponse } from 'next/server';
-import d1Client from '../../../../lib/cloudflare-d1';
 
-// GET - Récupérer tous les produits
+// GET - Récupérer tous les produits pour le panel admin
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const category = searchParams.get('category');
-    const farm = searchParams.get('farm');
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
     
-    const filters: any = { is_available: true };
-    if (category && category !== 'Toutes les catégories') {
-      // Récupérer l'ID de la catégorie
-      try {
-        const categoryData = await d1Client.findOne('categories', { name: category });
-        if (categoryData) {
-          filters.category_id = categoryData.id;
-        }
-      } catch (e) {
-        console.warn('Erreur récupération catégorie:', e);
-      }
-    }
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
     
-    if (farm && farm !== 'Toutes les farms') {
-      // Récupérer l'ID de la farm
-      try {
-        const farmData = await d1Client.findOne('farms', { name: farm });
-        if (farmData) {
-          filters.farm_id = farmData.id;
-        }
-      } catch (e) {
-        console.warn('Erreur récupération farm:', e);
-      }
-    }
-
-    const products = await d1Client.getProducts(filters);
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        sql: `
+          SELECT 
+            p.id, p.name, p.description, p.price, p.prices, 
+            p.image_url, p.video_url, p.stock, p.is_available,
+            c.name as category, f.name as farm,
+            p.category_id, p.farm_id, p.features, p.tags
+          FROM products p
+          LEFT JOIN categories c ON p.category_id = c.id
+          LEFT JOIN farms f ON p.farm_id = f.id
+          ORDER BY p.created_at DESC
+        `
+      })
+    });
     
-    // Enrichir avec les noms de catégories et farms
-    const enrichedProducts = await Promise.all(
-      (products || []).map(async (product: any) => {
-        let category = null;
-        let farm = null;
-        
-        try {
-          if (product.category_id) {
-            category = await d1Client.findOne('categories', { id: product.category_id });
-          }
-          
-          if (product.farm_id) {
-            farm = await d1Client.findOne('farms', { id: product.farm_id });
-          }
-        } catch (e) {
-          console.warn('Erreur enrichissement produit:', e);
-        }
-        
-        // Adapter au format attendu par ProductCard
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success && data.result?.[0]?.results) {
+      const products = data.result[0].results.map((product: any) => {
         let prices = {};
+        let features = [];
+        let tags = [];
+        
         try {
-          // Essayer de parser les prix depuis la colonne prices (JSON)
           prices = JSON.parse(product.prices || '{}');
-          
-          // Si les prix sont vides, utiliser le prix de base
-          if (Object.keys(prices).length === 0 && product.price > 0) {
-            const basePrice = parseFloat(product.price);
-            prices = {
-              "5g": basePrice,
-              "10g": Math.round(basePrice * 1.8 * 100) / 100,
-              "25g": Math.round(basePrice * 4 * 100) / 100,
-              "50g": Math.round(basePrice * 7 * 100) / 100,
-              "100g": Math.round(basePrice * 12 * 100) / 100,
-              "200g": Math.round(basePrice * 20 * 100) / 100,
-            };
-          }
+          features = JSON.parse(product.features || '[]');
+          tags = JSON.parse(product.tags || '[]');
         } catch (e) {
-          console.warn('Erreur parsing prix:', e);
-          prices = {
-            "5g": 0,
-            "10g": 0,
-            "25g": 0,
-            "50g": 0,
-            "100g": 0,
-            "200g": 0,
-          };
+          prices = {};
+          features = [];
+          tags = [];
         }
-
+        
         return {
-          _id: product.id?.toString() || product._id,
+          id: product.id,
           name: product.name,
           description: product.description || '',
-          category: category?.name || 'Sans catégorie',
-          farm: farm?.name || 'Sans farm',
-          image: product.image_url || '',
-          video: product.video_url || '',
+          category: product.category || 'Sans catégorie',
+          farm: product.farm || 'Sans farm',
+          category_id: product.category_id,
+          farm_id: product.farm_id,
+          image_url: product.image_url || '',
+          video_url: product.video_url || '',
           prices: prices,
-          images: JSON.parse(product.images || '[]'),
-          features: JSON.parse(product.features || '[]'),
-          tags: JSON.parse(product.tags || '[]'),
+          price: product.price || 0,
           stock: product.stock || 0,
-          is_available: product.is_available !== false
+          is_available: product.is_available !== false && product.is_available !== 'false',
+          features: features,
+          tags: tags
         };
-      })
-    );
-
-    return NextResponse.json(enrichedProducts || []);
+      });
+      
+      console.log(`🛍️ Produits récupérés pour admin: ${products.length}`);
+      return NextResponse.json(products);
+    } else {
+      return NextResponse.json([]);
+    }
   } catch (error) {
-    console.error('Erreur récupération produits:', error);
-    // Retourner un tableau vide en cas d'erreur
-    return NextResponse.json([]);
+    console.error('❌ Erreur API produits admin:', error);
+    return NextResponse.json([], { status: 500 });
   }
 }
 
@@ -113,96 +84,53 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      name,
-      description = '',
-      price = 0,
-      prices = {},
-      category,
-      farm,
-      image_url = '',
-      image = '',
-      video_url = '',
-      video = '',
-      images = [],
-      stock = 0,
-      is_available = true,
-      features = [],
-      tags = []
-    } = body;
-
-    if (!name) {
-      return NextResponse.json(
-        { error: 'Le nom du produit est requis' },
-        { status: 400 }
-      );
-    }
-
-    // Récupérer les IDs de catégorie et farm
-    let category_id = null;
-    let farm_id = null;
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
     
-    if (category) {
-      const categoryData = await d1Client.findOne('categories', { name: category });
-      category_id = categoryData?.id || null;
-    }
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
     
-    if (farm) {
-      const farmData = await d1Client.findOne('farms', { name: farm });
-      farm_id = farmData?.id || null;
-    }
-
-    // Utiliser image ou image_url selon ce qui est fourni
-    const finalImageUrl = image_url || image || '';
-    const finalVideoUrl = video_url || video || '';
+    const sql = `INSERT INTO products (
+      name, description, price, prices, category_id, farm_id,
+      image_url, video_url, stock, is_available, features, tags
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     
-    // Gérer les prix par quantité
-    let finalPrices = {};
-    if (Object.keys(prices).length > 0) {
-      finalPrices = prices;
-    } else if (price > 0) {
-      // Créer les prix par quantité basés sur le prix de base
-      const basePrice = parseFloat(price);
-      finalPrices = {
-        "5g": basePrice,
-        "10g": Math.round(basePrice * 1.8 * 100) / 100,
-        "25g": Math.round(basePrice * 4 * 100) / 100,
-        "50g": Math.round(basePrice * 7 * 100) / 100,
-        "100g": Math.round(basePrice * 12 * 100) / 100,
-        "200g": Math.round(basePrice * 20 * 100) / 100,
-      };
-    }
-
-    // S'assurer que price n'est jamais null/undefined
-    const finalPrice = price !== undefined && price !== null ? parseFloat(price) : 0;
-    const validPrice = isNaN(finalPrice) ? 0 : finalPrice;
-
-    const productData = {
-      name,
-      description: description || '',
-      price: validPrice,
-      prices: JSON.stringify(finalPrices),
-      category_id,
-      farm_id,
-      image_url: finalImageUrl || '',
-      video_url: finalVideoUrl || '',
-      images: JSON.stringify(images || []),
-      stock: parseInt(stock) || 0,
-      is_available: Boolean(is_available),
-      features: JSON.stringify(features || []),
-      tags: JSON.stringify(tags || []),
-    };
-
-    console.log('🗄️ Données produit pour création:', productData);
-
-    const newProduct = await d1Client.create('products', productData);
+    const values = [
+      body.name,
+      body.description || '',
+      parseFloat(body.price) || 0,
+      JSON.stringify(body.prices || {}),
+      body.category_id || null,
+      body.farm_id || null,
+      body.image_url || '',
+      body.video_url || '',
+      parseInt(body.stock) || 0,
+      body.is_available !== false,
+      JSON.stringify(body.features || []),
+      JSON.stringify(body.tags || [])
+    ];
     
-    return NextResponse.json(newProduct, { status: 201 });
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ sql, params: values })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Produit créé avec succès');
+      return NextResponse.json({ success: true, id: data.result[0].meta.last_row_id }, { status: 201 });
+    } else {
+      throw new Error('Erreur création produit');
+    }
   } catch (error) {
-    console.error('Erreur création produit:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur lors de la création du produit' },
-      { status: 500 }
-    );
+    console.error('❌ Erreur création produit:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

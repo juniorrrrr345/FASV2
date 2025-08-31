@@ -1,47 +1,80 @@
-import { NextResponse } from 'next/server';
-import d1Client from '../../../../lib/cloudflare-d1';
+import { NextRequest, NextResponse } from 'next/server';
 
-// GET - Récupérer toutes les farms
+// GET - Récupérer toutes les farms pour le panel admin
 export async function GET() {
   try {
-    const farms = await d1Client.getFarms();
-    return NextResponse.json(farms);
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
+    
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
+    
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        sql: 'SELECT * FROM farms ORDER BY name ASC'
+      })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success && data.result?.[0]?.results) {
+      console.log(`🏭 Farms récupérées pour admin: ${data.result[0].results.length}`);
+      return NextResponse.json(data.result[0].results);
+    } else {
+      return NextResponse.json([]);
+    }
   } catch (error) {
-    console.error('Erreur récupération farms:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur lors de la récupération des farms' },
-      { status: 500 }
-    );
+    console.error('❌ Erreur API farms admin:', error);
+    return NextResponse.json([], { status: 500 });
   }
 }
 
 // POST - Créer une nouvelle farm
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description = '', location = '', contact = '' } = body;
-
-    if (!name) {
-      return NextResponse.json(
-        { error: 'Le nom de la farm est requis' },
-        { status: 400 }
-      );
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
+    
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
+    
+    const sql = `INSERT INTO farms (name, description, location, contact) VALUES (?, ?, ?, ?)`;
+    const values = [
+      body.name,
+      body.description || '',
+      body.location || '',
+      body.contact || ''
+    ];
+    
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ sql, params: values })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Farm créée avec succès');
+      return NextResponse.json({ success: true, id: data.result[0].meta.last_row_id }, { status: 201 });
+    } else {
+      throw new Error('Erreur création farm');
     }
-
-    const farmData = {
-      name,
-      description,
-      location,
-      contact,
-    };
-
-    const newFarm = await d1Client.create('farms', farmData);
-    return NextResponse.json(newFarm, { status: 201 });
   } catch (error) {
-    console.error('Erreur création farm:', error);
-    return NextResponse.json(
-      { error: 'Erreur serveur lors de la création de la farm' },
-      { status: 500 }
-    );
+    console.error('❌ Erreur création farm:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

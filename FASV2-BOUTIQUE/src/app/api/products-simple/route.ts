@@ -24,7 +24,7 @@ export async function GET() {
           FROM products p
           LEFT JOIN categories c ON p.category_id = c.id
           LEFT JOIN farms f ON p.farm_id = f.id
-          WHERE p.is_available = 1
+          WHERE (p.is_available = 1 OR p.is_available = 'true' OR p.is_available IS NULL)
           ORDER BY p.created_at DESC
         `
       })
