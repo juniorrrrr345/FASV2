@@ -103,10 +103,39 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const updatedSettings = await d1Client.updateSettings(updateData);
+    // Simple requête UPDATE SQL directe
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '7979421604bd07b3bd34d3ed96222512';
+    const DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID || '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb';
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW';
     
-    console.log('✅ Settings mis à jour:', updatedSettings);
-    return NextResponse.json(updatedSettings);
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DATABASE_ID}/query`;
+    
+    // Construire la requête UPDATE
+    const fields = Object.keys(updateData);
+    const setClause = fields.map(field => `${field} = ?`).join(', ');
+    const values = Object.values(updateData);
+    
+    const sql = `UPDATE settings SET ${setClause} WHERE id = 1`;
+    
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ sql, params: values })
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      console.log('✅ Settings mis à jour avec succès');
+      return NextResponse.json({ success: true, updated: updateData });
+    } else {
+      throw new Error('Erreur mise à jour settings');
+    }
   } catch (error) {
     console.error('❌ Erreur PUT settings:', error);
     return NextResponse.json(
