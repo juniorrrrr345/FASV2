@@ -976,6 +976,14 @@ export default function ProductsManager() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Image du produit</label>
+                    <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-3 mb-3">
+                      <div className="text-xs text-blue-300 font-semibold mb-1">💡 POUR CLOUDFLARE R2 :</div>
+                      <div className="text-xs text-blue-200">
+                        1. Uploadez votre image sur Cloudflare R2<br/>
+                        2. Copiez l'URL publique<br/>
+                        3. Format: https://pub-b38679a01a274648827751df94818418.r2.dev/images/nom.jpg
+                      </div>
+                    </div>
                     
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
@@ -1012,14 +1020,15 @@ export default function ProductsManager() {
                       </div>
                     </div>
                     
-                    {/* Champ URL manuel */}
-                    <div className="text-sm text-gray-400 mb-2">Ou entrer une URL manuellement :</div>
+                    {/* Champ URL manuel OBLIGATOIRE */}
+                    <div className="text-sm text-yellow-400 mb-2 font-semibold">⚠️ URL IMAGE OBLIGATOIRE (Cloudflare R2) :</div>
                     <input
                       type="text"
                       value={formData.image_url || ''}
                       onChange={(e) => updateField('image_url', e.target.value)}
-                      className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://... (URL de l'image OBLIGATOIRE pour affichage)"
+                      className="w-full bg-gray-800 border-2 border-yellow-500/50 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/images/votre-image.jpg"
+                      required
                     />
                     
                     {/* Préview de l'image */}
@@ -1040,6 +1049,14 @@ export default function ProductsManager() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Vidéo du produit (optionnel)</label>
+                    <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-3 mb-3">
+                      <div className="text-xs text-purple-300 font-semibold mb-1">💡 POUR CLOUDFLARE R2 :</div>
+                      <div className="text-xs text-purple-200">
+                        1. Uploadez votre vidéo sur Cloudflare R2<br/>
+                        2. Copiez l'URL publique<br/>
+                        3. Format: https://pub-b38679a01a274648827751df94818418.r2.dev/videos/nom.mp4
+                      </div>
+                    </div>
                     
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
@@ -1081,9 +1098,9 @@ export default function ProductsManager() {
                     <input
                       type="text"
                       value={formData.video_url || ''}
-                      onChange={(e) => updateField('video', e.target.value)}
+                      onChange={(e) => updateField('video_url', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://... ou data:video/..."
+                      placeholder="https://pub-b38679a01a274648827751df94818418.r2.dev/videos/votre-video.mp4"
                     />
                     
                     {/* Préview de la vidéo */}
@@ -1319,7 +1336,7 @@ export default function ProductsManager() {
                       <input
                         type="text"
                         value={formData.video_url || ''}
-                        onChange={(e) => updateField('video', e.target.value)}
+                        onChange={(e) => updateField('video_url', e.target.value)}
                         className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                         placeholder="URL de la vidéo..."
                       />
