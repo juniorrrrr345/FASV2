@@ -10,8 +10,8 @@ export default function InfoPageClient() {
 
   useEffect(() => {
     loadContent();
-    // Synchronisation temps réel
-    const interval = setInterval(loadContent, 5000);
+    // Synchronisation temps réel INSTANTANÉE
+    const interval = setInterval(loadContent, 1000); // 1 seconde pour instantané
     return () => clearInterval(interval);
   }, []);
 

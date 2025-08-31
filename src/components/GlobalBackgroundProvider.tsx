@@ -82,7 +82,24 @@ export default function GlobalBackgroundProvider() {
         console.error('Erreur chargement settings:', error);
       });
     
-    // 3. Écouter les changements de settings
+    // 3. Synchronisation temps réel des settings depuis l'API
+    const loadSettingsFromAPI = async () => {
+      try {
+        const response = await fetch('/api/cloudflare/settings', { cache: 'no-store' });
+        if (response.ok) {
+          const settings = await response.json();
+          localStorage.setItem('shopSettings', JSON.stringify(settings));
+          applyBackground(settings, true);
+        }
+      } catch (error) {
+        console.error('Erreur chargement settings API:', error);
+      }
+    };
+    
+    // Recharger les settings toutes les secondes pour instantané
+    const settingsInterval = setInterval(loadSettingsFromAPI, 1000);
+    
+    // 4. Écouter les changements de settings
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'shopSettings' && e.newValue) {
         try {
@@ -106,6 +123,7 @@ export default function GlobalBackgroundProvider() {
     
     return () => {
       mounted = false;
+      clearInterval(settingsInterval);
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('settingsUpdated' as any, handleSettingsUpdate as any);
     };
