@@ -1017,9 +1017,9 @@ export default function ProductsManager() {
                     <input
                       type="text"
                       value={formData.image_url || ''}
-                      onChange={(e) => updateField('image', e.target.value)}
+                      onChange={(e) => updateField('image_url', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://... ou data:image/..."
+                      placeholder="https://... (URL de l'image OBLIGATOIRE pour affichage)"
                     />
                     
                     {/* Préview de l'image */}
