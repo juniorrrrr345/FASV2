@@ -278,14 +278,15 @@ export default function HomePage() {
             <div className="text-center bg-black/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 max-w-lg mx-auto border border-white/20">
 
               
-              {/* Logo dynamique depuis panel admin */}
+              {/* Image de fond de la boutique comme logo */}
               <div className="mb-8">
-                <img 
-                  src={logoImage} 
-                  alt="FAS" 
-                  className="h-32 sm:h-40 md:h-48 w-auto mx-auto rounded-xl"
-                  style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}
-                  onError={() => setLogoImage('https://i.imgur.com/s1rsguc.jpeg')}
+                <div 
+                  className="h-32 sm:h-40 md:h-48 w-32 sm:w-40 md:w-48 mx-auto rounded-xl bg-cover bg-center bg-no-repeat border-4 border-white/20"
+                  style={{ 
+                    backgroundImage: `url(${logoImage})`,
+                    filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))',
+                    backgroundSize: 'cover'
+                  }}
                 />
               </div>
               
