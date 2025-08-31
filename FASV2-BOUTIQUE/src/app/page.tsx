@@ -25,27 +25,7 @@ export default function HomePage() {
   
   // États pour les données - Initialiser avec des valeurs par défaut
   const [loading, setLoading] = useState(true); // Toujours true au départ
-  // État pour l'image de fond (initialisé avec image de fond si disponible)
-  const [logoImage, setLogoImage] = useState<string>(() => {
-    // Initialisation synchrone depuis localStorage
-    if (typeof window !== 'undefined') {
-      try {
-        const cached = localStorage.getItem('shopSettings');
-        if (cached) {
-          const settings = JSON.parse(cached);
-          const bgImage = settings.backgroundImage || settings.background_image;
-          if (bgImage) {
-            console.log('🎨 Logo initialisé IMMÉDIATEMENT:', bgImage.substring(0, 30) + '...');
-            return bgImage;
-          }
-        }
-      } catch (e) {
-        console.error('Erreur init logo sync:', e);
-      }
-    }
-    // Si pas trouvé, on va charger depuis l'API
-    return '';
-  });
+
   
   // Gérer la logique de première visite côté client uniquement
   useEffect(() => {
@@ -159,49 +139,7 @@ export default function HomePage() {
   // Synchronisation avec l'admin
   useAdminSync(loadAllData);
 
-  // CHARGEMENT IMMÉDIAT DE L'IMAGE DE FOND POUR LE LOGO (AVANT RENDU)
-  useLayoutEffect(() => {
-    const loadBackgroundImageForLogo = async () => {
-      try {
-        // 1. Essayer localStorage en premier (INSTANTANÉ)
-        const cachedSettings = localStorage.getItem('shopSettings');
-        if (cachedSettings) {
-          const settings = JSON.parse(cachedSettings);
-          const bgImage = settings.backgroundImage || settings.background_image;
-          if (bgImage) {
-            setLogoImage(bgImage);
-            console.log('🎨 Image de fond chargée depuis cache pour logo:', bgImage.substring(0, 40) + '...');
-            return; // Arrêter ici si trouvé en cache
-          }
-        }
-        
-        // 2. Si pas en cache, charger depuis l'API D1
-        console.log('🔄 Chargement image de fond depuis API...');
-        const response = await fetch('/api/cloudflare/settings', { cache: 'no-store' });
-        if (response.ok) {
-          const settings = await response.json();
-          const bgImage = settings.backgroundImage || settings.background_image;
-          if (bgImage) {
-            setLogoImage(bgImage);
-            localStorage.setItem('shopSettings', JSON.stringify(settings));
-            console.log('🎨 Image de fond chargée depuis API pour logo:', bgImage.substring(0, 40) + '...');
-          } else {
-            // Fallback si pas d'image configurée
-            setLogoImage('https://i.imgur.com/s1rsguc.jpeg');
-          }
-        } else {
-          // Fallback si API échoue
-          setLogoImage('https://i.imgur.com/s1rsguc.jpeg');
-        }
-      } catch (error) {
-        console.error('Erreur chargement image de fond pour logo:', error);
-        setLogoImage('https://i.imgur.com/s1rsguc.jpeg'); // Fallback
-      }
-    };
-    
-    // Charger IMMÉDIATEMENT l'image de fond
-    loadBackgroundImageForLogo();
-  }, []); // Seulement au montage
+
 
   // CHARGEMENT INSTANTANÉ DEPUIS L'API (DONNÉES FRAÎCHES)
   useEffect(() => {
@@ -281,15 +219,13 @@ export default function HomePage() {
             <div className="text-center bg-black/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 max-w-lg mx-auto border border-white/20">
 
               
-              {/* Image de fond de la boutique comme logo */}
+              {/* Logo carré = image de fond de la boutique */}
               <div className="mb-8">
-                <div 
-                  className="h-32 sm:h-40 md:h-48 w-32 sm:w-40 md:w-48 mx-auto rounded-xl bg-cover bg-center bg-no-repeat border-4 border-white/20"
-                  style={{ 
-                    backgroundImage: `url(${logoImage || 'https://i.imgur.com/s1rsguc.jpeg'})`,
-                    filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))',
-                    backgroundSize: 'cover'
-                  }}
+                <img 
+                  src="https://i.imgur.com/s1rsguc.jpeg"
+                  alt="FAS" 
+                  className="h-32 sm:h-40 md:h-48 w-32 sm:w-40 md:w-48 mx-auto rounded-xl object-cover border-4 border-white/20"
+                  style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}
                 />
               </div>
               
