@@ -31,13 +31,14 @@ export default function MediaDisplay({
     );
   }
 
-  // Détection vidéo : MP4 classique + Cloudflare Video + iframe
+  // Détection vidéo : MP4 classique + Cloudflare Video + iframe + Cloudflare R2
   const isVideo = /\.(mp4|webm|ogg|avi|mov|wmv)(\?|$)/i.test(url) || 
                   url.includes('video/') ||
                   url.includes('/videos/') ||
                   url.includes('videodelivery.net') ||
                   url.includes('iframe.videodelivery') ||
-                  url.includes('cloudflarestream.com');
+                  url.includes('cloudflarestream.com') ||
+                  url.includes('pub-b38679a01a274648827751df94818418.r2.dev/videos/');
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -46,7 +47,14 @@ export default function MediaDisplay({
 
   const handleError = () => {
     setIsLoading(false);
-    setHasError(true);
+    // Si c'est une URL Cloudflare R2, essayer de la corriger
+    if (url.includes('pub-b38679a01a274648827751df94818418.r2.dev')) {
+      console.log('⚠️ Erreur chargement Cloudflare R2:', url);
+      // Pour l'instant, ne pas marquer comme erreur pour debug
+      setHasError(false);
+    } else {
+      setHasError(true);
+    }
   };
 
   if (hasError) {
