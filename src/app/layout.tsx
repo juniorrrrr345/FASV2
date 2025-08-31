@@ -138,6 +138,15 @@ export default function RootLayout({
                           apiSettings.backgroundOpacity || apiSettings.background_opacity || 20,
                           apiSettings.backgroundBlur || apiSettings.background_blur || 5
                         );
+                        
+                        // Mettre à jour aussi le logo de chargement s'il existe
+                        const logoElements = document.querySelectorAll('img[alt="FAS"]');
+                        logoElements.forEach(logo => {
+                          if (logo.src !== (apiSettings.backgroundImage || apiSettings.background_image)) {
+                            logo.src = apiSettings.backgroundImage || apiSettings.background_image;
+                            console.log('🎨 Logo chargement mis à jour:', logo.src.substring(0, 30) + '...');
+                          }
+                        });
                       }
                     })
                     .catch(e => console.error('Erreur chargement fond API:', e));
