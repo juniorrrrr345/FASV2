@@ -14,7 +14,7 @@ const MONGODB_DB_NAME = 'fasandfurious';
 // Configuration Cloudflare D1 destination
 const CLOUDFLARE_CONFIG = {
   accountId: '7979421604bd07b3bd34d3ed96222512',
-  databaseId: 'VOTRE-UUID', // ⚠️ À remplacer par l'UUID D1 créé
+  databaseId: '78d6725a-cd0f-46f9-9fa4-25ca4faa3efb', // UUID D1 FAS
   apiToken: 'ijkVhaXCw6LSddIMIMxwPL5CDAWznxip5x9I1bNW'
 };
 
