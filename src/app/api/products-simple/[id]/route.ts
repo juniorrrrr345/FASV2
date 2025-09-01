@@ -30,9 +30,7 @@ const executeSQL = async (sql: string, params: any[] = []) => {
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    const productId = params.id;
-    
-    console.log('📝 Modification produit:', productId, body);
+    const productId = parseInt(params.id);
     
     // Validation des champs obligatoires
     if (!body.name || !body.category || !body.farm || !body.image_url) {
@@ -51,18 +49,22 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     if (!category_id || !farm_id) {
       return NextResponse.json(
-        { error: 'Catégorie ou farm introuvable' },
+        { 
+          error: 'Catégorie ou farm introuvable',
+          searchedCategory: body.category,
+          searchedFarm: body.farm
+        },
         { status: 400 }
       );
     }
 
-    // Préparer les données
+    // Préparer les données - SIMPLIFIÉES
     const prices = JSON.stringify(body.prices || {});
     const features = JSON.stringify(body.features || []);
     const tags = JSON.stringify(body.tags || []);
     const promotions = JSON.stringify(body.promotions || {});
     
-    // Mettre à jour le produit
+    // Mettre à jour le produit - REQUÊTE SIMPLIFIÉE
     const updateSQL = `
       UPDATE products SET
         name = ?, description = ?, category_id = ?, farm_id = ?, 
@@ -72,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       WHERE id = ?
     `;
     
-    const params = [
+    const updateParams = [
       body.name,
       body.description || '',
       category_id,
@@ -80,8 +82,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       body.image_url,
       body.video_url || '',
       prices,
-      body.price || 0,
-      body.stock || 0,
+      parseFloat(body.price) || 0,
+      parseInt(body.stock) || 0,
       body.isActive !== false ? 1 : 0,
       features,
       tags,
@@ -89,24 +91,18 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       productId
     ];
 
-    const result = await executeSQL(updateSQL, params);
+    const result = await executeSQL(updateSQL, updateParams);
     
     if (result.success) {
-      console.log('✅ Produit modifié avec succès');
       return NextResponse.json({ success: true });
     } else {
-      throw new Error('Échec de la modification');
+      throw new Error(`Échec de la modification: ${JSON.stringify(result)}`);
     }
   } catch (error) {
-    console.error('❌ Erreur modification produit:', error);
-    console.error('❌ Stack trace:', error.stack);
-    console.error('❌ Données reçues:', body);
-    console.error('❌ Product ID:', productId);
     return NextResponse.json(
       { 
         error: 'Erreur lors de la modification du produit',
-        details: error.message,
-        productId: productId
+        details: error.message
       },
       { status: 500 }
     );

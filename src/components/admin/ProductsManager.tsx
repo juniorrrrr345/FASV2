@@ -312,8 +312,8 @@ export default function ProductsManager() {
         promotions: finalPromotions
       };
 
-      const url = editingProduct ? `/api/products-simple/${editingProduct._id}` : '/api/products-simple';
-      const method = editingProduct ? 'PUT' : 'POST';
+      const url = editingProduct ? `/api/debug-update` : '/api/products-simple';
+      const method = editingProduct ? 'POST' : 'POST';
       
       // Vérifier la taille de la requête avant envoi
       const requestSize = JSON.stringify(cleanedFormData).length;
@@ -342,12 +342,18 @@ export default function ProductsManager() {
         isUpdate: !!editingProduct
       });
 
+      // Préparer les données pour l'endpoint de debug
+      const requestData = editingProduct ? {
+        productId: editingProduct._id,
+        ...cleanedFormData
+      } : cleanedFormData;
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(cleanedFormData),
+        body: JSON.stringify(requestData),
       });
 
       console.log('📡 Réponse sauvegarde:', response.status, response.statusText);
