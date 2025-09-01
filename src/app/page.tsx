@@ -151,10 +151,10 @@ export default function HomePage() {
       setLoading(false);
     }, 3000);
     
-    // Rafraîchir les données toutes les 2 secondes pour synchronisation temps réel
+    // Rafraîchir les données toutes les 60 secondes pour synchronisation
     const interval = setInterval(() => {
       loadAllData();
-    }, 2000);
+    }, 60000);
     
     return () => {
       clearTimeout(loadingTimeout);

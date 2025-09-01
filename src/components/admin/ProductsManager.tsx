@@ -312,8 +312,8 @@ export default function ProductsManager() {
         promotions: finalPromotions
       };
 
-      const url = editingProduct ? `/api/debug-update` : '/api/products-simple';
-      const method = editingProduct ? 'POST' : 'POST';
+      const url = editingProduct ? `/api/cloudflare/products/${editingProduct._id}` : '/api/products-simple';
+      const method = editingProduct ? 'PUT' : 'POST';
       
       // Vérifier la taille de la requête avant envoi
       const requestSize = JSON.stringify(cleanedFormData).length;
@@ -342,11 +342,8 @@ export default function ProductsManager() {
         isUpdate: !!editingProduct
       });
 
-      // Préparer les données pour l'endpoint de debug
-      const requestData = editingProduct ? {
-        productId: editingProduct._id,
-        ...cleanedFormData
-      } : cleanedFormData;
+      // Préparer les données pour l'endpoint
+      const requestData = cleanedFormData;
 
       const response = await fetch(url, {
         method,
