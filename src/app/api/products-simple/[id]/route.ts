@@ -99,8 +99,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
   } catch (error) {
     console.error('❌ Erreur modification produit:', error);
+    console.error('❌ Stack trace:', error.stack);
+    console.error('❌ Données reçues:', body);
+    console.error('❌ Product ID:', productId);
     return NextResponse.json(
-      { error: 'Erreur lors de la modification du produit' },
+      { 
+        error: 'Erreur lors de la modification du produit',
+        details: error.message,
+        productId: productId
+      },
       { status: 500 }
     );
   }
