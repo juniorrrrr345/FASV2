@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 
 interface SocialLink {
   id?: number;
-  name: string;
+  _id?: string; // Pour compatibilité avec MongoDB
+  name: string; // Utilisé dans l'interface, mappé vers 'platform' pour l'API
   url: string;
   icon: string;
   color: string;
-  is_active: boolean;
+  is_active: boolean; // Utilisé dans l'interface, mappé vers 'is_available' pour l'API
 }
 
 export default function SocialLinksManager() {
@@ -39,13 +40,14 @@ export default function SocialLinksManager() {
         const data = await response.json();
         console.log('🌐 Admin: Données brutes reçues:', data);
         
-        // Adapter les données API (id → _id) pour compatibilité interface
+        // Adapter les données API pour compatibilité interface
         const adaptedData = data.map((link: any) => ({
           ...link,
           _id: link.id?.toString() || link._id,
+          name: link.platform || link.name, // L'API renvoie 'platform', on map vers 'name'
           // S'assurer que tous les champs nécessaires existent
           color: link.color || '#0088cc',
-          is_active: link.is_active !== false
+          is_active: link.is_available !== false // L'API renvoie 'is_available', on map vers 'is_active'
         }));
         
         console.log('🌐 Liens sociaux adaptés pour admin:', adaptedData);
@@ -78,7 +80,7 @@ export default function SocialLinksManager() {
       url: '',
       icon: '',
       color: '#0088cc',
-      isActive: true
+      is_active: true
     });
     setShowModal(true);
   };
@@ -94,16 +96,26 @@ export default function SocialLinksManager() {
       const url = editingLink ? `/api/cloudflare/social-links/${editingLink._id}` : '/api/cloudflare/social-links';
       const method = editingLink ? 'PUT' : 'POST';
       
+      // Préparer les données selon le format attendu par l'API
+      const apiData: any = {
+        platform: formData.name, // L'API attend 'platform' pas 'name'
+        url: formData.url,
+        icon: formData.icon,
+        color: formData.color || '#0088cc',
+        is_available: formData.is_active !== false // L'API attend 'is_available' pas 'is_active'
+      };
+      
+      // Si c'est une édition, inclure l'ID
+      if (editingLink && editingLink._id) {
+        apiData.id = editingLink._id;
+      }
+      
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          color: formData.color || '#0088cc',
-          is_active: formData.is_active !== false // Respecter la valeur choisie
-        }),
+        body: JSON.stringify(apiData),
       });
 
       if (response.ok) {
