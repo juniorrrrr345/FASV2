@@ -1,0 +1,148 @@
+{
+  "timestamp": "2025-08-31T23:49:00.198Z",
+  "bucketName": "fas-media",
+  "totalUploaded": 28,
+  "urlsUpdated": 28,
+  "files": [
+    {
+      "localPath": "/workspace/backup-media/products/images/68927c1295b9e27363750810_1756683832787.jpg",
+      "r2Key": "products/images/68927c1295b9e27363750810_1756683832787.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68927c1295b9e27363750810_1756683832787.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68927c9295b9e27363750811_1756683835422.jpg",
+      "r2Key": "products/images/68927c9295b9e27363750811_1756683835422.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68927c9295b9e27363750811_1756683835422.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68927cfc95b9e27363750812_1756683837752.jpg",
+      "r2Key": "products/images/68927cfc95b9e27363750812_1756683837752.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68927cfc95b9e27363750812_1756683837752.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68927d7e95b9e27363750813_1756683839102.jpg",
+      "r2Key": "products/images/68927d7e95b9e27363750813_1756683839102.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68927d7e95b9e27363750813_1756683839102.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68927dff95b9e27363750814_1756683842574.jpg",
+      "r2Key": "products/images/68927dff95b9e27363750814_1756683842574.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68927dff95b9e27363750814_1756683842574.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/6892812495b9e27363750818_1756683844922.jpg",
+      "r2Key": "products/images/6892812495b9e27363750818_1756683844922.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/6892812495b9e27363750818_1756683844922.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/6892827995b9e2736375081b_1756683847725.jpg",
+      "r2Key": "products/images/6892827995b9e2736375081b_1756683847725.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/6892827995b9e2736375081b_1756683847725.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/6892830a3c54213a35e21f31_1756683850348.jpg",
+      "r2Key": "products/images/6892830a3c54213a35e21f31_1756683850348.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/6892830a3c54213a35e21f31_1756683850348.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/6892838a3c54213a35e21f32_1756683852921.jpg",
+      "r2Key": "products/images/6892838a3c54213a35e21f32_1756683852921.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/6892838a3c54213a35e21f32_1756683852921.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68939107f8f943620d7e5acd_1756683853813.jpg",
+      "r2Key": "products/images/68939107f8f943620d7e5acd_1756683853813.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68939107f8f943620d7e5acd_1756683853813.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/6894c21e31151925267f83bc_1756683856127.jpg",
+      "r2Key": "products/images/6894c21e31151925267f83bc_1756683856127.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/6894c21e31151925267f83bc_1756683856127.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/689a34e97a5a0e1d6291e81e_1756683858941.jpg",
+      "r2Key": "products/images/689a34e97a5a0e1d6291e81e_1756683858941.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/689a34e97a5a0e1d6291e81e_1756683858941.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/689a35670d563dd57ef12b02_1756683861026.jpg",
+      "r2Key": "products/images/689a35670d563dd57ef12b02_1756683861026.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/689a35670d563dd57ef12b02_1756683861026.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68a4cee9eacc2d354a586e43_1756683862646.jpg",
+      "r2Key": "products/images/68a4cee9eacc2d354a586e43_1756683862646.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68a4cee9eacc2d354a586e43_1756683862646.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/images/68a4cfa9eacc2d354a586e44_1756683864687.jpg",
+      "r2Key": "products/images/68a4cfa9eacc2d354a586e44_1756683864687.jpg",
+      "publicUrl": "https://pub-79794216.r2.dev/products/images/68a4cfa9eacc2d354a586e44_1756683864687.jpg"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68927c1295b9e27363750810_1756683833631.mp4",
+      "r2Key": "products/videos/68927c1295b9e27363750810_1756683833631.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68927c1295b9e27363750810_1756683833631.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68927c9295b9e27363750811_1756683836085.mp4",
+      "r2Key": "products/videos/68927c9295b9e27363750811_1756683836085.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68927c9295b9e27363750811_1756683836085.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68927d7e95b9e27363750813_1756683840187.mp4",
+      "r2Key": "products/videos/68927d7e95b9e27363750813_1756683840187.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68927d7e95b9e27363750813_1756683840187.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68927dff95b9e27363750814_1756683843478.mp4",
+      "r2Key": "products/videos/68927dff95b9e27363750814_1756683843478.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68927dff95b9e27363750814_1756683843478.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/6892812495b9e27363750818_1756683845939.mp4",
+      "r2Key": "products/videos/6892812495b9e27363750818_1756683845939.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/6892812495b9e27363750818_1756683845939.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/6892827995b9e2736375081b_1756683848608.mp4",
+      "r2Key": "products/videos/6892827995b9e2736375081b_1756683848608.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/6892827995b9e2736375081b_1756683848608.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/6892830a3c54213a35e21f31_1756683851012.mp4",
+      "r2Key": "products/videos/6892830a3c54213a35e21f31_1756683851012.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/6892830a3c54213a35e21f31_1756683851012.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68939107f8f943620d7e5acd_1756683854575.mov",
+      "r2Key": "products/videos/68939107f8f943620d7e5acd_1756683854575.mov",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68939107f8f943620d7e5acd_1756683854575.mov"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/6894c21e31151925267f83bc_1756683857233.mp4",
+      "r2Key": "products/videos/6894c21e31151925267f83bc_1756683857233.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/6894c21e31151925267f83bc_1756683857233.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/689a34e97a5a0e1d6291e81e_1756683859961.mp4",
+      "r2Key": "products/videos/689a34e97a5a0e1d6291e81e_1756683859961.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/689a34e97a5a0e1d6291e81e_1756683859961.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/689a35670d563dd57ef12b02_1756683861686.mp4",
+      "r2Key": "products/videos/689a35670d563dd57ef12b02_1756683861686.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/689a35670d563dd57ef12b02_1756683861686.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68a4cee9eacc2d354a586e43_1756683863268.mp4",
+      "r2Key": "products/videos/68a4cee9eacc2d354a586e43_1756683863268.mp4",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68a4cee9eacc2d354a586e43_1756683863268.mp4"
+    },
+    {
+      "localPath": "/workspace/backup-media/products/videos/68a4cfa9eacc2d354a586e44_1756683865460.mov",
+      "r2Key": "products/videos/68a4cfa9eacc2d354a586e44_1756683865460.mov",
+      "publicUrl": "https://pub-79794216.r2.dev/products/videos/68a4cfa9eacc2d354a586e44_1756683865460.mov"
+    }
+  ]
+}

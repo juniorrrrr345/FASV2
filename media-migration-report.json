@@ -1,0 +1,204 @@
+{
+  "timestamp": "2025-08-31T23:44:27.543Z",
+  "totalFiles": 28,
+  "images": 15,
+  "videos": 13,
+  "files": [
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1755011562/boutique_images/upload_1755011561991.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68927c1295b9e27363750810_1756683832787.jpg",
+      "localPath": "/workspace/backup-media/products/images/68927c1295b9e27363750810_1756683832787.jpg",
+      "productName": "MOUSSEUX 🧽"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1755011582/boutique_videos/upload_1755011582397.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68927c1295b9e27363750810_1756683833631.mp4",
+      "localPath": "/workspace/backup-media/products/videos/68927c1295b9e27363750810_1756683833631.mp4",
+      "productName": "MOUSSEUX 🧽"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754430559/boutique_images/upload_1754430559015.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68927c9295b9e27363750811_1756683835422.jpg",
+      "localPath": "/workspace/backup-media/products/images/68927c9295b9e27363750811_1756683835422.jpg",
+      "productName": "AMNEZIA HAZE"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754430579/boutique_videos/upload_1754430579242.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68927c9295b9e27363750811_1756683836085.mp4",
+      "localPath": "/workspace/backup-media/products/videos/68927c9295b9e27363750811_1756683836085.mp4",
+      "productName": "AMNEZIA HAZE"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754430651/boutique_images/upload_1754430651210.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68927cfc95b9e27363750812_1756683837752.jpg",
+      "localPath": "/workspace/backup-media/products/images/68927cfc95b9e27363750812_1756683837752.jpg",
+      "productName": "Pink 🥀 "
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754430772/boutique_images/upload_1754430772183.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68927d7e95b9e27363750813_1756683839102.jpg",
+      "localPath": "/workspace/backup-media/products/images/68927d7e95b9e27363750813_1756683839102.jpg",
+      "productName": "Nasa 🛰️"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754430785/boutique_videos/upload_1754430785071.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68927d7e95b9e27363750813_1756683840187.mp4",
+      "localPath": "/workspace/backup-media/products/videos/68927d7e95b9e27363750813_1756683840187.mp4",
+      "productName": "Nasa 🛰️"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754430909/boutique_images/upload_1754430909142.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68927dff95b9e27363750814_1756683842574.jpg",
+      "localPath": "/workspace/backup-media/products/images/68927dff95b9e27363750814_1756683842574.jpg",
+      "productName": "LV ⚙️"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754430906/boutique_videos/upload_1754430906750.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68927dff95b9e27363750814_1756683843478.mp4",
+      "localPath": "/workspace/backup-media/products/videos/68927dff95b9e27363750814_1756683843478.mp4",
+      "productName": "LV ⚙️"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754431732/boutique_images/upload_1754431732024.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/6892812495b9e27363750818_1756683844922.jpg",
+      "localPath": "/workspace/backup-media/products/images/6892812495b9e27363750818_1756683844922.jpg",
+      "productName": "  • Sugar"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754431735/boutique_videos/upload_1754431735110.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/6892812495b9e27363750818_1756683845939.mp4",
+      "localPath": "/workspace/backup-media/products/videos/6892812495b9e27363750818_1756683845939.mp4",
+      "productName": "  • Sugar"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754432042/boutique_images/upload_1754432041959.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/6892827995b9e2736375081b_1756683847725.jpg",
+      "localPath": "/workspace/backup-media/products/images/6892827995b9e2736375081b_1756683847725.jpg",
+      "productName": "🟢MDMA 🥂10/10 ⭐️"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754432044/boutique_videos/upload_1754432044707.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/6892827995b9e2736375081b_1756683848608.mp4",
+      "localPath": "/workspace/backup-media/products/videos/6892827995b9e2736375081b_1756683848608.mp4",
+      "productName": "🟢MDMA 🥂10/10 ⭐️"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754432243/boutique_images/upload_1754432243136.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/6892830a3c54213a35e21f31_1756683850348.jpg",
+      "localPath": "/workspace/backup-media/products/images/6892830a3c54213a35e21f31_1756683850348.jpg",
+      "productName": "JUNGLE BOYS 🇺🇸 "
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754432240/boutique_videos/upload_1754432240547.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/6892830a3c54213a35e21f31_1756683851012.mp4",
+      "localPath": "/workspace/backup-media/products/videos/6892830a3c54213a35e21f31_1756683851012.mp4",
+      "productName": "JUNGLE BOYS 🇺🇸 "
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754432363/boutique_images/upload_1754432363516.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/6892838a3c54213a35e21f32_1756683852921.jpg",
+      "localPath": "/workspace/backup-media/products/images/6892838a3c54213a35e21f32_1756683852921.jpg",
+      "productName": "SIROP THC 🧋"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754501263/boutique_images/upload_1754501263455.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68939107f8f943620d7e5acd_1756683853813.jpg",
+      "localPath": "/workspace/backup-media/products/images/68939107f8f943620d7e5acd_1756683853813.jpg",
+      "productName": "Dry 🍫"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754501329/boutique_videos/upload_1754501329640.mov",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68939107f8f943620d7e5acd_1756683854575.mov",
+      "localPath": "/workspace/backup-media/products/videos/68939107f8f943620d7e5acd_1756683854575.mov",
+      "productName": "Dry 🍫"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754579440/boutique_images/upload_1754579440851.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/6894c21e31151925267f83bc_1756683856127.jpg",
+      "localPath": "/workspace/backup-media/products/images/6894c21e31151925267f83bc_1756683856127.jpg",
+      "productName": "🟢 Ice Cream Cake 🎂"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754579439/boutique_videos/upload_1754579438767.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/6894c21e31151925267f83bc_1756683857233.mp4",
+      "localPath": "/workspace/backup-media/products/videos/6894c21e31151925267f83bc_1756683857233.mp4",
+      "productName": "🟢 Ice Cream Cake 🎂"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754936500/boutique_images/upload_1754936500096.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/689a34e97a5a0e1d6291e81e_1756683858941.jpg",
+      "localPath": "/workspace/backup-media/products/images/689a34e97a5a0e1d6291e81e_1756683858941.jpg",
+      "productName": "🟢 Biscotti 🌰"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754936502/boutique_videos/upload_1754936502444.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/689a34e97a5a0e1d6291e81e_1756683859961.mp4",
+      "localPath": "/workspace/backup-media/products/videos/689a34e97a5a0e1d6291e81e_1756683859961.mp4",
+      "productName": "🟢 Biscotti 🌰"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1754936674/boutique_images/upload_1754936674597.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/689a35670d563dd57ef12b02_1756683861026.jpg",
+      "localPath": "/workspace/backup-media/products/images/689a35670d563dd57ef12b02_1756683861026.jpg",
+      "productName": "🟢 White Truffle 🤯☄️"
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1754936677/boutique_videos/upload_1754936677313.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/689a35670d563dd57ef12b02_1756683861686.mp4",
+      "localPath": "/workspace/backup-media/products/videos/689a35670d563dd57ef12b02_1756683861686.mp4",
+      "productName": "🟢 White Truffle 🤯☄️"
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1755631235/boutique_images/upload_1755631235517.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68a4cee9eacc2d354a586e43_1756683862646.jpg",
+      "localPath": "/workspace/backup-media/products/images/68a4cee9eacc2d354a586e43_1756683862646.jpg",
+      "productName": "3MMC "
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1755631250/boutique_videos/upload_1755631250085.mp4",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68a4cee9eacc2d354a586e43_1756683863268.mp4",
+      "localPath": "/workspace/backup-media/products/videos/68a4cee9eacc2d354a586e43_1756683863268.mp4",
+      "productName": "3MMC "
+    },
+    {
+      "type": "image",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/image/upload/v1755631405/boutique_images/upload_1755631405282.jpg",
+      "newUrl": "https://pub-79794216.r2.dev/products/images/68a4cfa9eacc2d354a586e44_1756683864687.jpg",
+      "localPath": "/workspace/backup-media/products/images/68a4cfa9eacc2d354a586e44_1756683864687.jpg",
+      "productName": "Needles "
+    },
+    {
+      "type": "video",
+      "originalUrl": "https://res.cloudinary.com/dfbv2sln2/video/upload/v1755631451/boutique_videos/upload_1755631451512.mov",
+      "newUrl": "https://pub-79794216.r2.dev/products/videos/68a4cfa9eacc2d354a586e44_1756683865460.mov",
+      "localPath": "/workspace/backup-media/products/videos/68a4cfa9eacc2d354a586e44_1756683865460.mov",
+      "productName": "Needles "
+    }
+  ]
+}
